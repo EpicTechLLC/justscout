@@ -2,7 +2,6 @@
 
 import TeamInfoTemplate from "@/app/components/UI/Template/TeamInfoTemplate/TeamInfoTemplate";
 import { ITeam } from "@/app/types/ITeam";
-import { ITeamList } from "@/app/types/ITeamList";
 import ky from "ky";
 import { Fragment, useEffect, useState } from "react";
 
