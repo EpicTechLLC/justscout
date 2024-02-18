@@ -8,9 +8,7 @@ export default async function authenticateFirebaseToken(
 ) {
   if (admin.apps.length === 0) {
     admin.initializeApp({
-      credential: admin.credential.cert(
-        JSON.parse(process.env.SERVICE_ACCOUNT as string)
-      ),
+      credential: admin.credential.cert(process.env.SERVICE_ACCOUNT as string),
       databaseURL: process.env.NEXT_PUBLIC_FIREBASE_DATABASE_URL,
       storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
     });
