@@ -1,6 +1,5 @@
 import { User, getAuth } from "firebase/auth";
 import ky from "ky";
-import { useAuthState } from "react-firebase-hooks/auth";
 
 export default function firebaseRequest(user: User) {
   return ky.extend({

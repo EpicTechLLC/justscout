@@ -1,13 +1,14 @@
 import admin, { ServiceAccount } from "firebase-admin";
 import { DecodedIdToken } from "firebase-admin/auth";
-import { User } from "firebase/auth";
 import { ReadonlyHeaders } from "next/dist/server/web/spec-extension/adapters/headers";
-const serviceAccount = require("../../../serviceAccountKey.json");
+
 if (admin.apps.length === 0) {
   admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount),
-    databaseURL: "https://justscoutdev.firebaseio.com/",
-    storageBucket: "justscout-dev.appspot.com",
+    credential: admin.credential.cert(
+      JSON.parse(process.env.SERVICE_ACCOUNT as string)
+    ),
+    databaseURL: process.env.NEXT_PUBLIC_FIREBASE_DATABASE_URL,
+    storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
   });
 }
 export default async function authenticateFirebaseToken(
@@ -19,7 +20,10 @@ export default async function authenticateFirebaseToken(
     try {
       let decodedIdToken = (await admin
         .auth()
-        .verifyIdToken(idToken)) as DecodedIdToken;
+        .verifyIdToken(idToken)
+        .catch((e) => {
+          console.error(e);
+        })) as DecodedIdToken;
       return { ...decodedIdToken };
     } catch (error) {
       return undefined;
