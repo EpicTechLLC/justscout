@@ -1,8 +1,8 @@
 import { ITeam } from "@/app/types/ITeam";
 import getLocation from "@/app/util/getLocation";
-import { West } from "@mui/icons-material";
-import { Grid, Link, Typography } from "@mui/material";
+import { Grid, Link as MUILink, Typography } from "@mui/material";
 import Card from "@mui/material/Card";
+import Link from "next/link";
 
 export interface TeamInfoTemplateProps extends ITeam {}
 
@@ -75,10 +75,15 @@ export default function TeamInfoTemplate({
           </Grid>
         ) : null}
         <Grid item xs={12}>
-          <Link href={localWebsite}>Website</Link>
+          <MUILink component={Link} href={localWebsite}>
+            Website
+          </MUILink>
         </Grid>
         <Grid item xs={12}>
-          Details on <Link href={firstWebsite}>firstinspires.org</Link>
+          Details on{" "}
+          <MUILink component={Link} href={firstWebsite}>
+            firstinspires.org
+          </MUILink>
         </Grid>
       </Grid>
     </Card>

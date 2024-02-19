@@ -7,9 +7,9 @@ import { Fragment, PropsWithChildren, useState } from "react";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import { Divider } from "@mui/material";
-// import ModeToggle from "../../Layout/ModeToggle";
 import { usePathname } from "next/navigation";
 import { ISetting } from "@/app/types/ISettings";
+import ColorModeToggle from "../../Atom/ColorModeToggle/ColorModeToggle";
 
 export interface SideBarProps extends PropsWithChildren {
   Settings: ISetting[];
@@ -71,11 +71,11 @@ export default function SideBar({ Settings, children }: SideBarProps) {
                 </Fragment>
               );
             })}
-            {/* <ListItem>
+            <ListItem>
               <ListItemButton>
-                <ModeToggle />
+                <ColorModeToggle />
               </ListItemButton>
-            </ListItem> */}
+            </ListItem>
           </List>
         </Grid>
       </Grid>
