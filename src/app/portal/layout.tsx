@@ -31,7 +31,11 @@ export default function PortalLayout({
     setLocalLoading(false);
   }
   useEffect(() => {
-    if (!loadingAuth && user) {
+    if (!loadingAuth) {
+      if (user === null) {
+        router.replace(AppRoutes.LOGIN);
+        return;
+      }
       setLocalLoading(true);
       getInfo();
     }
