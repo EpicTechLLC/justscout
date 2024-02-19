@@ -1,6 +1,7 @@
-import admin, { ServiceAccount } from "firebase-admin";
+import admin from "firebase-admin";
 import { DecodedIdToken } from "firebase-admin/auth";
 import { ReadonlyHeaders } from "next/dist/server/web/spec-extension/adapters/headers";
+
 export const dynamic = "force-dynamic";
 
 export default async function authenticateFirebaseToken(
@@ -8,13 +9,10 @@ export default async function authenticateFirebaseToken(
 ) {
   if (admin.apps.length === 0) {
     admin.initializeApp({
-      credential: admin.credential.cert({
-        clientEmail: process.env.SERVICE_ACCOUNT_CLIENT_EMAIL,
-        privateKey: process.env.SERVICE_ACCOUNT_PRIVATE_KEY,
-        projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
-      }),
+      credential: admin.credential.cert(
+        JSON.parse(process.env.SERVICE_ACCOUNT as string)
+      ),
       databaseURL: process.env.NEXT_PUBLIC_FIREBASE_DATABASE_URL,
-      storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
     });
   }
   let idToken = headers.get("authorization")?.split("Bearer ")[1] as string;
