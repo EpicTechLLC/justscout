@@ -29,8 +29,8 @@ export default function EventInfoDisplayTemplate({
       </Grid>
       <Grid item xs={12}>
         <Typography>
-          Last updated <ReactTimeAgo date={new Date(Number(modified))} />
-          by: {modifiedByName}
+          Last updated <ReactTimeAgo date={new Date(Number(modified))} /> by:{" "}
+          {modifiedByName}
         </Typography>
       </Grid>
       {isCreator ? (
