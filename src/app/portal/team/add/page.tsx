@@ -15,7 +15,7 @@ import ky from "ky";
 import { useRouter } from "next/navigation";
 import { Fragment, useCallback, useContext, useEffect, useState } from "react";
 
-export default function TeamAdd() {
+export default function TeamEventAdd() {
   const { userInfo, user } = useContext(AppUserContext);
   const [teamEvents, setTeamEvents] = useState<IBlueAllianceEventSimple[]>([]);
   const [valid, setValid] = useState(false);
