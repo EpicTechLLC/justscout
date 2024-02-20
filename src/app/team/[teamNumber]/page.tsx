@@ -1,5 +1,4 @@
 "use client";
-
 import Loading from "@/app/components/UI/Atom/Loading";
 import FirstTeamInfoTemplate from "@/app/components/UI/Template/FirstTeamInfoTemplate/FirstTeamInfoTemplate";
 import JustScoutTeamInfoTemplate from "@/app/components/UI/Template/JustScoutTeamInfoTemplate/JustScoutTeamInfoTemplate";
@@ -73,10 +72,11 @@ export default function TeamPage({
     router.push(`
       ${AppRoutes.TEAM_PORTAL_ADD}`);
   };
-  return (
+  return !teamInfo ? (
+    <Loading />
+  ) : (
     <Fragment>
-      {teamInfo ? <FirstTeamInfoTemplate {...teamInfo} /> : <Loading />}
-
+      <FirstTeamInfoTemplate {...teamInfo} />
       <JustScoutTeamInfoTemplate
         events={events}
         isTeamMember={String(userTeamNumber) === params.teamNumber}
