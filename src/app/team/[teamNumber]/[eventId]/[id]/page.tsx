@@ -1,12 +1,10 @@
 "use client";
+import ConfirmDeletionTemplate from "@/app/components/UI/Template/ConfirmDeletionTemplate/ConfirmDeletionTemplate";
 import EventInfoDisplayTemplate from "@/app/components/UI/Template/EventInfoDisplayTemplate/EventInfoDisplayTemplate";
+import ShareEventTemplate from "@/app/components/UI/Template/ShareEventTemplate/ShareEventTemplate";
 import { AppRoutes } from "@/app/enums/AppRoutes";
 import { ISharedEventInfo } from "@/app/types/ISharedEventInfo";
 import firebaseRequest from "@/app/util/firebaseRequest";
-import Button from "@mui/material/Button";
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogTitle from "@mui/material/DialogTitle";
 import { getAuth } from "firebase/auth";
 import ky from "ky";
 import { useRouter } from "next/navigation";
@@ -23,6 +21,10 @@ export default function EventView({
   const [eventData, setEventData] = useState<ISharedEventInfo>();
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
+  const origin =
+    typeof window !== "undefined" && window.location.origin
+      ? window.location.origin
+      : "";
   const router = useRouter();
   async function getEventData() {
     try {
@@ -59,7 +61,7 @@ export default function EventView({
           id,
         },
       });
-      router.back();
+      router.push(`${AppRoutes.TEAM}/${teamNumber}`);
     } catch {}
   }
 
@@ -74,25 +76,18 @@ export default function EventView({
           {...eventData}
         />
       ) : null}
-
-      <Dialog
-        open={isDeleteModalOpen}
+      <ConfirmDeletionTemplate
+        isDeleteModalOpen={isDeleteModalOpen}
         onClose={() => setIsDeleteModalOpen(false)}
-      >
-        <DialogTitle>Are you user you want to delete this event?</DialogTitle>
-        <DialogActions>
-          <Button onClick={handleDeletion} color="error" variant="contained">
-            Yes
-          </Button>
-
-          <Button
-            onClick={() => setIsDeleteModalOpen(false)}
-            variant="contained"
-          >
-            No
-          </Button>
-        </DialogActions>
-      </Dialog>
+        handleDeletion={handleDeletion}
+      />
+      <ShareEventTemplate
+        open={isShareModalOpen}
+        onClose={() => setIsShareModalOpen(false)}
+        eventName={eventData ? eventData.name : ""}
+        urlToCopy={`${origin}/team/${teamNumber}/${eventId}/${id}`}
+        columns={eventData ? eventData.columns : []}
+      />
     </Fragment>
   );
 }
