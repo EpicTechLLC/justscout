@@ -2,11 +2,12 @@
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
+import MUILink from "@mui/material/Link";
 import Typography from "@mui/material/Typography";
-import { Link } from "@mui/material";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { getAuth } from "firebase/auth";
 import { AppRoutes } from "../enums/AppRoutes";
+import Link from "next/link";
 
 export default function Header() {
   const [user] = useAuthState(getAuth());
@@ -32,7 +33,8 @@ export default function Header() {
           >
             Just Scout
           </Typography>
-          <Link
+          <MUILink
+            component={Link}
             href={AppRoutes.TEAMS}
             style={{
               textDecoration: "none",
@@ -41,9 +43,10 @@ export default function Header() {
             }}
           >
             Teams
-          </Link>
+          </MUILink>
           {user === null || user === undefined ? (
-            <Link
+            <MUILink
+              component={Link}
               href={AppRoutes.LOGIN}
               style={{
                 textDecoration: "none",
@@ -51,9 +54,10 @@ export default function Header() {
               }}
             >
               Login
-            </Link>
+            </MUILink>
           ) : (
-            <Link
+            <MUILink
+              component={Link}
               href={AppRoutes.ACCOUNT}
               style={{
                 textDecoration: "none",
@@ -61,7 +65,7 @@ export default function Header() {
               }}
             >
               Account
-            </Link>
+            </MUILink>
           )}
         </Toolbar>
       </AppBar>

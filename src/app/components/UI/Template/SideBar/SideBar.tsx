@@ -2,14 +2,13 @@ import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import Typography from "@mui/material/Typography";
-import Grid from "@mui/material/Unstable_Grid2";
 import { Fragment, PropsWithChildren, useState } from "react";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
-import { Divider } from "@mui/material";
-// import ModeToggle from "../../Layout/ModeToggle";
+import { Divider, Grid } from "@mui/material";
 import { usePathname } from "next/navigation";
 import { ISetting } from "@/app/types/ISettings";
+import ColorModeToggle from "../../Atom/ColorModeToggle/ColorModeToggle";
 
 export interface SideBarProps extends PropsWithChildren {
   Settings: ISetting[];
@@ -19,16 +18,15 @@ export default function SideBar({ Settings, children }: SideBarProps) {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
   return (
-    <Grid container spacing={8} justifyContent="center" m={1}>
-      <Grid
-        spacing={1}
-        lg={2}
-        xs={12}
-        justifyContent="center"
-        textAlign="center"
-        alignContent="center"
-      >
-        <Grid xs={12}>
+    <Grid
+      container
+      spacing={4}
+      m={1}
+      justifyContent="center"
+      alignContent="center"
+    >
+      <Grid item xs={12} sm={12} md={2}>
+        <Grid item sm={12}>
           <Typography
             variant={"h4"}
             fontWeight="bold"
@@ -38,20 +36,25 @@ export default function SideBar({ Settings, children }: SideBarProps) {
             {isOpen ? (
               <ExpandLessIcon
                 fontSize="large"
-                sx={{ mb: -1, display: { lg: "none" } }}
+                sx={{ mb: -1, display: { md: "none" } }}
               />
             ) : (
               <ExpandMoreIcon
                 fontSize="large"
-                sx={{ mb: -1, display: { lg: "none" } }}
+                sx={{ mb: -1, display: { md: "none" } }}
               />
             )}
           </Typography>
         </Grid>
         <Grid
-          xs={12}
-          display={{ xs: isOpen ? null : "none", lg: "flex" }}
-          textAlign="center"
+          item
+          xs={6}
+          sm={3}
+          display={{
+            sm: isOpen ? "flex" : "none",
+            xs: isOpen ? "flex" : "none",
+            md: "flex",
+          }}
         >
           <List>
             {Settings.map((setting, index) => {
@@ -71,15 +74,15 @@ export default function SideBar({ Settings, children }: SideBarProps) {
                 </Fragment>
               );
             })}
-            {/* <ListItem>
-              <ListItemButton>
-                <ModeToggle />
+            <ListItem>
+              <ListItemButton disableGutters={true}>
+                <ColorModeToggle />
               </ListItemButton>
-            </ListItem> */}
+            </ListItem>
           </List>
         </Grid>
       </Grid>
-      <Grid lg={10} md={10}>
+      <Grid item sm={12} md={10}>
         {children}
       </Grid>
     </Grid>

@@ -1,6 +1,6 @@
 "use client";
 import { GoogleLoginButton } from "react-social-login-buttons";
-import { GoogleAuthProvider, getAuth, signInWithRedirect } from "firebase/auth";
+import { GoogleAuthProvider, getAuth, signInWithPopup } from "firebase/auth";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { redirect } from "next/navigation";
 import { AppRoutes } from "../enums/AppRoutes";
@@ -22,7 +22,7 @@ export default function Login() {
       <GoogleLoginButton
         align="center"
         text="Google"
-        onClick={() => signInWithRedirect(getAuth(), provider)}
+        onClick={() => signInWithPopup(getAuth(), provider)}
       />
     </Grid>
   );
