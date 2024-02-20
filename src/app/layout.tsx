@@ -21,7 +21,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <Providers>
           <Header />
-          <Container sx={{ mt: 2 }}>{children}</Container>
+          <Container sx={{ mt: 4 }}>{children}</Container>
         </Providers>
       </body>
     </html>

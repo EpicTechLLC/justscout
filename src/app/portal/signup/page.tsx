@@ -1,18 +1,17 @@
 "use client";
-
+import { AppUserContext } from "@/app/Context/AppUserContext";
 import SignUpTemplate from "@/app/components/UI/Template/SignUpTemplate/SignUpTemplate";
 import { AppRoutes } from "@/app/enums/AppRoutes";
 import { ITeam } from "@/app/types/ITeam";
 import firebaseRequest from "@/app/util/firebaseRequest";
-import { Grid, TextField, Typography } from "@mui/material";
 import { User, getAuth } from "firebase/auth";
 import ky from "ky";
 import { useRouter } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 
 export default function SignupPage({}: {}) {
-  const [user] = useAuthState(getAuth());
+  const { user, triggerUpdate } = useContext(AppUserContext);
   const router = useRouter();
   const [teamNumber, setTeamNumber] = useState("");
   const currentTeamNumber = useRef("");
@@ -34,7 +33,7 @@ export default function SignupPage({}: {}) {
       return undefined;
     });
     if (result) {
-      router.push(AppRoutes.ACCOUNT);
+      triggerUpdate();
     }
   }
   useEffect(() => {

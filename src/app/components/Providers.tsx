@@ -8,6 +8,10 @@ import {
 import { PropsWithChildren, useMemo, useState } from "react";
 import firebase_app from "../util/firebaseConfig";
 import { ColorModeContext } from "../Context/ColorModeContext";
+import en from "javascript-time-ago/locale/en.json";
+import TimeAgo from "javascript-time-ago";
+
+TimeAgo.addDefaultLocale(en);
 
 export default function Providers({ children }: PropsWithChildren) {
   const app = firebase_app;
