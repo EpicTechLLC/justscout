@@ -1,6 +1,6 @@
 export interface IEventInfo {
   id: string;
-  modified: Date;
+  modified: number;
   name: string;
   modifiedByName: string;
   eventId: string;

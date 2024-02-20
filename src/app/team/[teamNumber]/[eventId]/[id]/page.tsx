@@ -1,5 +1,6 @@
 "use client";
 import EventInfoDisplayTemplate from "@/app/components/UI/Template/EventInfoDisplayTemplate/EventInfoDisplayTemplate";
+import { AppRoutes } from "@/app/enums/AppRoutes";
 import { ISharedEventInfo } from "@/app/types/ISharedEventInfo";
 import firebaseRequest from "@/app/util/firebaseRequest";
 import Button from "@mui/material/Button";
@@ -11,7 +12,6 @@ import ky from "ky";
 import { useRouter } from "next/navigation";
 import { Fragment, useEffect, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
-import ReactTimeAgo from "react-time-ago";
 
 export default function EventView({
   params,
@@ -25,16 +25,26 @@ export default function EventView({
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
   const router = useRouter();
   async function getEventData() {
-    const sharedEvent = (await ky
-      .get(`/api/justscout/${teamNumber}/event/${eventId}/${id}`)
-      .json()) as ISharedEventInfo;
-    if (sharedEvent) {
-      setEventData(sharedEvent);
+    try {
+      const sharedEvent = (await ky
+        .get(`/api/justscout/${teamNumber}/event/${eventId}/${id}`)
+        .json()) as ISharedEventInfo;
+      if (sharedEvent) {
+        setEventData(sharedEvent);
+      }
+    } catch (error) {
+      router.push(`${AppRoutes.TEAM}/${teamNumber}`);
     }
   }
   useEffect(() => {
     getEventData();
   }, []);
+
+  function navEdit() {
+    router.push(
+      `${AppRoutes.TEAM_PORTAL_EDIT}?teamNumber=${teamNumber}&eventId=${eventId}&id=${id}`
+    );
+  }
 
   async function handleDeletion() {
     if (!user || user === null) {
@@ -57,9 +67,7 @@ export default function EventView({
     <Fragment>
       {eventData ? (
         <EventInfoDisplayTemplate
-          navigateToEdit={function (): void {
-            throw new Error("Function not implemented.");
-          }}
+          navigateToEdit={navEdit}
           handleDeleteClick={() => setIsDeleteModalOpen(true)}
           isCreator={user?.uid === eventData.modifiedBy}
           openShareModalOpen={() => setIsShareModalOpen(true)}

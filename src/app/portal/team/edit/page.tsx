@@ -6,22 +6,28 @@ import StepperWrapperTemplate from "@/app/components/UI/Template/StepperWrapperT
 import { AppRoutes } from "@/app/enums/AppRoutes";
 import { IBlueAllianceEventSimple } from "@/app/types/IBlueAllianceEventSimple";
 import { IColumnProperties } from "@/app/types/IColumnProperties";
+import { ISharedEventInfo } from "@/app/types/ISharedEventInfo";
 import addColumn from "@/app/util/addColumn";
 import firebaseRequest from "@/app/util/firebaseRequest";
 import removeCol from "@/app/util/removeCol";
 import updateColumns from "@/app/util/updateColumns";
 import { User } from "firebase/auth";
 import ky from "ky";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Fragment, useCallback, useContext, useEffect, useState } from "react";
 
-export default function TeamEventAdd() {
+export default function TeamEventEdit() {
+  const searchParams = useSearchParams();
+  const teamNumber = searchParams.get("teamNumber");
+  const eventId = searchParams.get("eventId");
+  const id = searchParams.get("id");
   const { userInfo, user } = useContext(AppUserContext);
   const [teamEvents, setTeamEvents] = useState<IBlueAllianceEventSimple[]>([]);
   const [valid, setValid] = useState(false);
   const [columns, setColumns] = useState<IColumnProperties[]>([]);
   const [eventID, setEventID] = useState<string>("");
   const [eventName, setEventName] = useState<string>();
+  const api = firebaseRequest(user as User);
   const router = useRouter();
   async function getTeamEvents() {
     setTeamEvents(
@@ -30,10 +36,30 @@ export default function TeamEventAdd() {
         .json()) as IBlueAllianceEventSimple[]
     );
   }
-
   useEffect(() => {
     getTeamEvents();
   }, []);
+  async function getEventData() {
+    try {
+      const result = (await api
+        .get(
+          `/api/justscout/event?teamNumber=${teamNumber}&eventId=${eventId}&id=${id}`
+        )
+        .json()) as ISharedEventInfo;
+      if (result) {
+        setEventID(eventId as string);
+        setColumns(result.columns);
+        setEventName(result.name);
+        setValid(true);
+      }
+    } catch (error) {
+      router.replace(`${AppRoutes.TEAM}/${teamNumber}`);
+    }
+  }
+
+  useEffect(() => {
+    getEventData();
+  }, [teamNumber, eventId, id]);
 
   const eventSelected = (event: IBlueAllianceEventSimple) => {
     if (event.key === "") return;
@@ -62,13 +88,15 @@ export default function TeamEventAdd() {
   async function finish() {
     if (eventID === "") return;
     const data = {
+      id,
+      eventId,
       eventID,
       eventName,
       columns,
-      teamNumber: userInfo?.teamNumber,
+      teamNumber,
     };
-    const api = firebaseRequest(user as User);
-    await api.post("/api/justscout/event", { json: data }).json();
+
+    await api.put("/api/justscout/event", { json: data }).json();
     router.push(`${AppRoutes.TEAM}/${userInfo?.teamNumber}`);
   }
 
