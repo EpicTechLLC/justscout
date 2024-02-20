@@ -4,9 +4,9 @@ import { Grid, Link as MUILink, Typography } from "@mui/material";
 import Card from "@mui/material/Card";
 import Link from "next/link";
 
-export interface TeamInfoTemplateProps extends ITeam {}
+export interface FirstTeamInfoTemplateProps extends ITeam {}
 
-export default function TeamInfoTemplate({
+export default function FirstTeamInfoTemplate({
   teamNumber,
   nameFull,
   nameShort,
@@ -18,7 +18,7 @@ export default function TeamInfoTemplate({
   districtCode,
   schoolName,
   website,
-}: TeamInfoTemplateProps) {
+}: FirstTeamInfoTemplateProps) {
   const firstWebsite = `https://frc-events.firstinspires.org/team/${teamNumber}`;
   const localWebsite = website === "" ? firstWebsite : website;
   return (
