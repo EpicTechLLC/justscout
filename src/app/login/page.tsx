@@ -22,7 +22,18 @@ export default function Login() {
       <GoogleLoginButton
         align="center"
         text="Google"
-        onClick={() => signInWithRedirect(getAuth(), provider)}
+        onClick={() =>
+          signInWithRedirect(getAuth(), provider).then((result) => {
+            if (result) {
+              const credential =
+                GoogleAuthProvider.credentialFromResult(result);
+              const token = credential?.accessToken;
+              if (token) {
+                redirect(AppRoutes.ACCOUNT);
+              }
+            }
+          })
+        }
       />
     </Grid>
   );
