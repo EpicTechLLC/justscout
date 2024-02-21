@@ -1,6 +1,6 @@
 "use client";
 import { GoogleLoginButton } from "react-social-login-buttons";
-import { GoogleAuthProvider, getAuth, signInWithRedirect } from "firebase/auth";
+import { GoogleAuthProvider, getAuth, signInWithPopup } from "firebase/auth";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { redirect } from "next/navigation";
 import { AppRoutes } from "../enums/AppRoutes";
@@ -23,15 +23,16 @@ export default function Login() {
         align="center"
         text="Google"
         onClick={() =>
-          signInWithRedirect(getAuth(), provider).then((result) => {
-            if (result) {
-              const credential =
-                GoogleAuthProvider.credentialFromResult(result);
-              const token = credential?.accessToken;
-              if (token) {
-                redirect(AppRoutes.ACCOUNT);
-              }
-            }
+          signInWithPopup(getAuth(), provider).then((result) => {
+            redirect(AppRoutes.ACCOUNT);
+            // if (result) {
+            //   const credential =
+            //     GoogleAuthProvider.credentialFromResult(result);
+            //   const token = credential?.accessToken;
+            //   if (token) {
+            //     redirect(AppRoutes.ACCOUNT);
+            //   }
+            // }
           })
         }
       />
