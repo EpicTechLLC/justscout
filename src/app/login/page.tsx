@@ -23,16 +23,8 @@ export default function Login() {
         align="center"
         text="Google"
         onClick={() =>
-          signInWithPopup(getAuth(), provider).then((result) => {
+          signInWithPopup(getAuth(), provider).then(() => {
             redirect(AppRoutes.ACCOUNT);
-            // if (result) {
-            //   const credential =
-            //     GoogleAuthProvider.credentialFromResult(result);
-            //   const token = credential?.accessToken;
-            //   if (token) {
-            //     redirect(AppRoutes.ACCOUNT);
-            //   }
-            // }
           })
         }
       />
