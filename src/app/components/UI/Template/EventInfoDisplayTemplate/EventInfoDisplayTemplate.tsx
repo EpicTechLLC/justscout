@@ -2,10 +2,10 @@ import { ISharedEventInfo } from "@/app/types/ISharedEventInfo";
 import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
-import ReactTimeAgo from "react-time-ago";
 import ColumnEditor from "../../Organism/ColumnEditor/ColumnEditor";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
+import TimeAgo from "react-timeago";
 
 export interface EventInfoDisplayTemplateProps extends ISharedEventInfo {
   navigateToEdit: () => void;
@@ -33,8 +33,8 @@ export default function EventInfoDisplayTemplate({
           </Grid>
           <Grid item xs={12}>
             <Typography>
-              Last updated <ReactTimeAgo date={new Date(Number(modified))} />{" "}
-              by: {modifiedByName}
+              Last updated <TimeAgo date={new Date(Number(modified))} /> by:{" "}
+              {modifiedByName}
             </Typography>
           </Grid>
           {isCreator ? (

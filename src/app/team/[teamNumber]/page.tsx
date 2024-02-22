@@ -7,6 +7,7 @@ import { IEventInfo } from "@/app/types/IEventInfo";
 import { ITeam } from "@/app/types/ITeam";
 import { IUserInfo } from "@/app/types/IUserInfo";
 import firebaseRequest from "@/app/util/firebaseRequest";
+import { Grid } from "@mui/material";
 import { User, getAuth } from "firebase/auth";
 import ky from "ky";
 import { useRouter } from "next/navigation";
@@ -75,14 +76,18 @@ export default function TeamPage({
   return !teamInfo ? (
     <Loading />
   ) : (
-    <Fragment>
-      <FirstTeamInfoTemplate {...teamInfo} />
-      <JustScoutTeamInfoTemplate
-        events={events}
-        isTeamMember={String(userTeamNumber) === params.teamNumber}
-        redirectEvent={redirectEvent}
-        redirectAdd={redirectAdd}
-      />
-    </Fragment>
+    <Grid container>
+      <Grid item xs={12}>
+        <FirstTeamInfoTemplate {...teamInfo} />
+      </Grid>
+      <Grid item xs={12}>
+        <JustScoutTeamInfoTemplate
+          events={events}
+          isTeamMember={String(userTeamNumber) === params.teamNumber}
+          redirectEvent={redirectEvent}
+          redirectAdd={redirectAdd}
+        />
+      </Grid>
+    </Grid>
   );
 }
