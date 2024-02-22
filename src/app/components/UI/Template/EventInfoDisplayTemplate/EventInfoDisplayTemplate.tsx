@@ -25,7 +25,7 @@ export default function EventInfoDisplayTemplate({
   handleDeleteClick,
 }: EventInfoDisplayTemplateProps) {
   return (
-    <Card variant="outlined" elevation={24}>
+    <Card variant="outlined">
       <CardContent>
         <Grid container spacing={3}>
           <Grid item xs={12}>
