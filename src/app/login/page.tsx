@@ -22,7 +22,11 @@ export default function Login() {
       <GoogleLoginButton
         align="center"
         text="Google"
-        onClick={() => signInWithPopup(getAuth(), provider)}
+        onClick={() =>
+          signInWithPopup(getAuth(), provider).then(() => {
+            redirect(AppRoutes.ACCOUNT);
+          })
+        }
       />
     </Grid>
   );
