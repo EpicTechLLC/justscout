@@ -5,33 +5,28 @@ import Toolbar from "@mui/material/Toolbar";
 import MUILink from "@mui/material/Link";
 import Typography from "@mui/material/Typography";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { getAuth } from "firebase/auth";
+import { User, getAuth } from "firebase/auth";
 import { AppRoutes } from "../enums/AppRoutes";
 import Link from "next/link";
+import { ExploreOutlined } from "@mui/icons-material";
+import AccountMenu from "./UI/Organism/AccountMenu/AccountMenu";
+import { useRouter } from "next/navigation";
 
 export default function Header() {
   const [user] = useAuthState(getAuth());
+  const router = useRouter();
 
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
         <Toolbar>
-          {/* <IconButton
-            size="large"
-            edge="start"
-            color="inherit"
-            aria-label="menu"
-            sx={{ mr: 2 }}
-          >
-            <MenuIcon />
-          </IconButton> */}
           <Typography
             variant="h6"
             component={Link}
             href={AppRoutes.HOME}
             sx={{ flexGrow: 1, textDecoration: "none", color: "inherit" }}
           >
-            Just Scout
+            Just Scout <ExploreOutlined fontSize="inherit" />
           </Typography>
           <MUILink
             component={Link}
@@ -44,29 +39,18 @@ export default function Header() {
           >
             Teams
           </MUILink>
-          {user === null || user === undefined ? (
-            <MUILink
-              component={Link}
-              href={AppRoutes.LOGIN}
-              style={{
-                textDecoration: "none",
-                color: "inherit",
-              }}
-            >
-              Login
-            </MUILink>
-          ) : (
-            <MUILink
-              component={Link}
-              href={AppRoutes.ACCOUNT}
-              style={{
-                textDecoration: "none",
-                color: "inherit",
-              }}
-            >
-              Account
-            </MUILink>
-          )}
+          <AccountMenu
+            user={user as User}
+            navigate={(route) => router.push(route)}
+            signOut={() =>
+              getAuth()
+                .signOut()
+                .then(() => router.push(AppRoutes.LOGIN))
+                .catch((error) => {
+                  console.error(error);
+                })
+            }
+          />
         </Toolbar>
       </AppBar>
     </Box>

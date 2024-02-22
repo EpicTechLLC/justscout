@@ -29,6 +29,17 @@ export default function ColumnEditor({
       <Typography variant="h6" gutterBottom>
         {title}
       </Typography>
+      {!readonly ? (
+        <Button variant="contained" sx={{ mb: 2 }} onClick={addColumn}>
+          Add
+        </Button>
+      ) : null}
+      {columns.length >= 16 && !readonly ? (
+        <Typography color="error">
+          Warning: having more than 16 columns effects QR code scanning on some
+          devices
+        </Typography>
+      ) : null}
       {columns.length > 0 ? (
         <Card variant="outlined">
           <CardContent>
@@ -48,11 +59,6 @@ export default function ColumnEditor({
             ))}
           </CardContent>
         </Card>
-      ) : null}
-      {!readonly ? (
-        <Button sx={{ mt: 1 }} onClick={addColumn}>
-          Add
-        </Button>
       ) : null}
     </>
   );

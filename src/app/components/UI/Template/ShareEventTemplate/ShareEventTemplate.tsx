@@ -38,9 +38,10 @@ export default function ShareEventTemplate({
           justifyContent="center"
           alignItems="center"
           direction="column"
+          textAlign="center"
           mt={1}
         >
-          <Grid item>
+          <Grid item xs={12}>
             <QRCodeCanvas
               size={200}
               value={
@@ -52,6 +53,12 @@ export default function ShareEventTemplate({
                     })
               }
             />
+            {columns.length >= 16 ? (
+              <Typography color="error">
+                Warning: there are 16+ items some devices may have trouble
+                scanning the JSOn QR code
+              </Typography>
+            ) : null}
           </Grid>
           <Grid item>
             <ToggleButtonGroup

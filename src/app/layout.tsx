@@ -8,7 +8,7 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Just Scout",
-  description: "FRC Event Scouting",
+  description: "A simple way to share scouting information for FRC Teams",
 };
 
 export default function RootLayout({
@@ -21,7 +21,9 @@ export default function RootLayout({
       <body className={inter.className}>
         <Providers>
           <Header />
-          <Container sx={{ mt: 4 }}>{children}</Container>
+          <Container sx={{ mt: 4, display: "flex", justifyContent: "center" }}>
+            {children}
+          </Container>
         </Providers>
       </body>
     </html>

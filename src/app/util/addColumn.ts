@@ -10,6 +10,6 @@ export default function addColumn(
     label: "",
     value: "",
   };
-  const joined = columns.concat(newCol);
-  setColumns(joined);
+  const updated = [newCol, ...columns];
+  setColumns(updated);
 }
