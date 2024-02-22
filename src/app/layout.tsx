@@ -8,7 +8,7 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Just Scout",
-  description: "FRC Event Scouting",
+  description: "A simple way to share scouting information for FRC Teams",
 };
 
 export default function RootLayout({

@@ -8,6 +8,7 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { getAuth } from "firebase/auth";
 import { AppRoutes } from "../enums/AppRoutes";
 import Link from "next/link";
+import { ExploreOutlined } from "@mui/icons-material";
 
 export default function Header() {
   const [user] = useAuthState(getAuth());
@@ -31,7 +32,7 @@ export default function Header() {
             href={AppRoutes.HOME}
             sx={{ flexGrow: 1, textDecoration: "none", color: "inherit" }}
           >
-            Just Scout
+            Just Scout <ExploreOutlined fontSize="inherit" />
           </Typography>
           <MUILink
             component={Link}
