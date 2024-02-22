@@ -8,7 +8,6 @@ import { User, getAuth } from "firebase/auth";
 import ky from "ky";
 import { useRouter } from "next/navigation";
 import { useContext, useEffect, useRef, useState } from "react";
-import { useAuthState } from "react-firebase-hooks/auth";
 
 export default function SignupPage({}: {}) {
   const { user, triggerUpdate } = useContext(AppUserContext);

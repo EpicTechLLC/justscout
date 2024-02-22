@@ -32,10 +32,10 @@ export default function AccountMenu({
     handleClose();
     signOut();
   };
-  //   const handleFeedBackClick = () => {
-  //     handleClose();
-  //     //navigate(AppRoutes.FEEDBACK);
-  //   };
+  const handleFeedBackClick = () => {
+    handleClose();
+    navigate(AppRoutes.FEEDBACK);
+  };
   return (
     <Fragment>
       <IconButton
@@ -53,7 +53,7 @@ export default function AccountMenu({
           aria-label="account-Menu"
         >
           <MenuItem onClick={handleProfileClick}>Account</MenuItem>
-          {/* <MenuItem onClick={handleFeedBackClick}>Feedback</MenuItem> */}
+          <MenuItem onClick={handleFeedBackClick}>Feedback</MenuItem>
           <MenuItem onClick={handleSignOut}>Sign Out</MenuItem>
         </Menu>
       </IconButton>
