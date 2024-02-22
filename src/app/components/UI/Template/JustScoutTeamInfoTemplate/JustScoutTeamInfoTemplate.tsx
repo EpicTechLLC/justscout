@@ -1,10 +1,9 @@
-import { AppRoutes } from "@/app/enums/AppRoutes";
 import { IEventInfo } from "@/app/types/IEventInfo";
 import { Button, Paper } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
-import ReactTimeAgo from "react-time-ago";
+import TimeAgo from "react-timeago";
 
 export interface JustScoutTeamInfoTemplateProps {
   events: IEventInfo[];
@@ -53,7 +52,7 @@ export default function JustScoutTeamInfoTemplate({
                 <Typography variant="h5">{event.name}</Typography>
                 <Typography>
                   Modified By: {event.modifiedByName}{" "}
-                  <ReactTimeAgo date={event.modified} />
+                  <TimeAgo date={event.modified} />
                 </Typography>
               </Paper>
             ))}

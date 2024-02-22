@@ -15,7 +15,6 @@
     "@mui/material": "^5.15.10",
     "firebase": "^10.8.0",
     "firebase-admin": "^12.0.0",
-    "javascript-time-ago": "^2.5.9",
     "ky": "^1.2.0",
     "next": "14.1.0",
     "next-auth": "^5.0.0-beta.11",
@@ -24,12 +23,13 @@
     "react-dom": "^18",
     "react-firebase-hooks": "^5.1.1",
     "react-social-login-buttons": "^3.9.1",
-    "react-time-ago": "^7.2.1"
+    "react-timeago": "^7.2.0"
   },
   "devDependencies": {
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "@types/react-timeago": "^4.1.7",
     "typescript": "^5"
   }
 }

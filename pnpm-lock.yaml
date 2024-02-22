@@ -23,9 +23,6 @@ dependencies:
   firebase-admin:
     specifier: ^12.0.0
     version: 12.0.0
-  javascript-time-ago:
-    specifier: ^2.5.9
-    version: 2.5.9
   ky:
     specifier: ^1.2.0
     version: 1.2.0
@@ -50,9 +47,9 @@ dependencies:
   react-social-login-buttons:
     specifier: ^3.9.1
     version: 3.9.1(react@18.2.0)
-  react-time-ago:
-    specifier: ^7.2.1
-    version: 7.2.1(javascript-time-ago@2.5.9)(react-dom@18.2.0)(react@18.2.0)
+  react-timeago:
+    specifier: ^7.2.0
+    version: 7.2.0(react@18.2.0)
 
 devDependencies:
   '@types/node':
@@ -64,6 +61,9 @@ devDependencies:
   '@types/react-dom':
     specifier: ^18
     version: 18.2.19
+  '@types/react-timeago':
+    specifier: ^4.1.7
+    version: 4.1.7
   typescript:
     specifier: ^5
     version: 5.3.3
@@ -1266,6 +1266,12 @@ packages:
       '@types/react': 18.2.56
     dev: true
 
+  /@types/react-timeago@4.1.7:
+    resolution: {integrity: sha512-ogD4Ror/hDG+pQggCX+TgPgJ8W2jeeUxsgNU485Qpm0Ma+E2TND2EJuKwK5+sxlkDXDEgsHradO0zWBkTgLzNg==}
+    dependencies:
+      '@types/react': 18.2.56
+    dev: true
+
   /@types/react-transition-group@4.4.10:
     resolution: {integrity: sha512-hT/+s0VQs2ojCX823m60m5f0sL5idt9SO6Tj6Dg+rdphGPIeJbJ6CxvBYkgkGKrYeDjvIpKTR38UzmtHJOGW3Q==}
     dependencies:
@@ -1899,12 +1905,6 @@ packages:
     dev: false
     optional: true
 
-  /javascript-time-ago@2.5.9:
-    resolution: {integrity: sha512-pQ8mNco/9g9TqWXWWjP0EWl6i/lAQScOyEeXy5AB+f7MfLSdgyV9BJhiOD1zrIac/lrxPYOWNbyl/IW8CW5n0A==}
-    dependencies:
-      relative-time-format: 1.1.6
-    dev: false
-
   /jose@4.15.4:
     resolution: {integrity: sha512-W+oqK4H+r5sITxfxpSU+MMdr/YSWGvgZMQDIsNoBDGGy4i7GBPTtvFKibQzW06n3U3TqHjhvBJsirShsEJ6eeQ==}
     dev: false
@@ -2072,10 +2072,6 @@ packages:
     dependencies:
       lodash.clonedeep: 4.5.0
       lru-cache: 4.0.2
-    dev: false
-
-  /memoize-one@6.0.0:
-    resolution: {integrity: sha512-rkpe71W0N0c0Xz6QD0eJETuWAJGnJ9afsl1srmwPrI+yBCkge5EycXXbYRyvL29zZVUWQCY7InPRCv3GDXuZNw==}
     dev: false
 
   /mime-db@1.52.0:
@@ -2254,10 +2250,6 @@ packages:
     engines: {node: '>=8'}
     dev: false
 
-  /performance-now@2.1.0:
-    resolution: {integrity: sha512-7EAHlyLHI56VEIdK57uwHdHKIaAGbnXPiw0yWbarQZOKaKpvUIgW0jWRVLiatnM+XXlSwsanIBH/hzGMJulMow==}
-    dev: false
-
   /picocolors@1.0.0:
     resolution: {integrity: sha512-1fygroTLlHu66zi26VoTDv8yRgm0Fccecssto+MhsZ0D/DGW2sm8E8AjW7NU5VVTRt5GxbeZ5qBuJr+HyLYkjQ==}
     dev: false
@@ -2336,12 +2328,6 @@ packages:
       react: 18.2.0
     dev: false
 
-  /raf@3.4.1:
-    resolution: {integrity: sha512-Sq4CW4QhwOHE8ucn6J34MqtZCeWFP2aQSmrlroYgqAV1PjStIhJXxYuTgUIfkEk7zTLjmIjLmU5q+fbD1NnOJA==}
-    dependencies:
-      performance-now: 2.1.0
-    dev: false
-
   /react-dom@18.2.0(react@18.2.0):
     resolution: {integrity: sha512-6IMTriUmvsjHUjNtEDudZfuDQUoWXVxKHhlEGSk81n4YFS+r/Kl99wXiwlVXtPBtJenozv2P+hxDsw9eA7Xo6g==}
     peerDependencies:
@@ -2378,19 +2364,12 @@ packages:
       react: 18.2.0
     dev: false
 
-  /react-time-ago@7.2.1(javascript-time-ago@2.5.9)(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-X5zwJDZHa1fsMwMvh8mrHN31g85s84zMCp+d7YL6IX50kNnr6YMAS2wpt1BmO9OxBV2Ue5J1ptD6JI8Zjd35HA==}
+  /react-timeago@7.2.0(react@18.2.0):
+    resolution: {integrity: sha512-2KsBEEs+qRhKx/kekUVNSTIpop3Jwd7SRBm0R4Eiq3mPeswRGSsftY9FpKsE/lXLdURyQFiHeHFrIUxLYskG5g==}
     peerDependencies:
-      javascript-time-ago: ^2.3.7
-      react: '>=0.16.8'
-      react-dom: '>=0.16.8'
+      react: ^16.0.0 || ^17.0.0 || ^18.0.0
     dependencies:
-      javascript-time-ago: 2.5.9
-      memoize-one: 6.0.0
-      prop-types: 15.8.1
-      raf: 3.4.1
       react: 18.2.0
-      react-dom: 18.2.0(react@18.2.0)
     dev: false
 
   /react-transition-group@4.4.5(react-dom@18.2.0)(react@18.2.0):
@@ -2427,10 +2406,6 @@ packages:
 
   /regenerator-runtime@0.14.1:
     resolution: {integrity: sha512-dYnhHh0nJoMfnkZs6GmmhFknAGRrLznOu5nc9ML+EJxGvrx6H7teuevqVqCuPcPK//3eDrrjQhehXVx9cnkGdw==}
-    dev: false
-
-  /relative-time-format@1.1.6:
-    resolution: {integrity: sha512-aCv3juQw4hT1/P/OrVltKWLlp15eW1GRcwP1XdxHrPdZE9MtgqFpegjnTjLhi2m2WI9MT/hQQtE+tjEWG1hgkQ==}
     dev: false
 
   /require-directory@2.1.1:
