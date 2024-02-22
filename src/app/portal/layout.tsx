@@ -9,6 +9,29 @@ import firebaseRequest from "../util/firebaseRequest";
 import { IUserInfo } from "../types/IUserInfo";
 import { AppRoutes } from "../enums/AppRoutes";
 import { AppUserContext } from "../Context/AppUserContext";
+import { IPermission } from "../types/IPermission";
+import { PermissionTypes } from "../enums/PermissionTypes";
+
+const admin: IPermission = {
+  Create: true,
+  Read: true,
+  Update: true,
+  Delete: true,
+};
+
+const member: IPermission = {
+  Create: false,
+  Read: true,
+  Update: false,
+  Delete: false,
+};
+
+const defaultPermission: IPermission = {
+  Create: false,
+  Read: false,
+  Update: false,
+  Delete: false,
+};
 
 export default function PortalLayout({
   children,
@@ -18,6 +41,7 @@ export default function PortalLayout({
   const [user, loadingAuth] = useAuthState(getAuth());
   const [localLoading, setLocalLoading] = useState(true);
   const [userInfo, setUserInfo] = useState<IUserInfo>();
+  const [permission, setPermission] = useState<IPermission>(defaultPermission);
   const pathname = usePathname();
   const router = useRouter();
   async function getInfo() {
@@ -33,6 +57,12 @@ export default function PortalLayout({
     }
     setUserInfo(result);
     setLocalLoading(false);
+
+    if (userInfo?.role === PermissionTypes.ADMIN) {
+      setPermission(admin);
+    } else if (!userInfo?.role && userInfo?.role === PermissionTypes.MEMBER) {
+      setPermission(member);
+    }
   }
   useEffect(() => {
     if (!loadingAuth) {
@@ -53,6 +83,7 @@ export default function PortalLayout({
         user: user as User,
         loadingUser: localLoading,
         triggerUpdate: getInfo,
+        permission: permission,
       }}
     >
       {children}
