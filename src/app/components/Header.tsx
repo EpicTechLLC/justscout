@@ -34,10 +34,21 @@ export default function Header() {
             style={{
               textDecoration: "none",
               color: "inherit",
-              paddingRight: "2rem",
             }}
+            p={2}
           >
             Teams
+          </MUILink>
+          <MUILink
+            component={Link}
+            href={AppRoutes.SCOUTING}
+            style={{
+              textDecoration: "none",
+              color: "inherit",
+            }}
+            p={2}
+          >
+            Scouting
           </MUILink>
           <AccountMenu
             user={user as User}

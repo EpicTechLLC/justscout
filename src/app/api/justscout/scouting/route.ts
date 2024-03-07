@@ -59,6 +59,22 @@ async function CreateData(
   });
 }
 
+export async function GET(_request: NextRequest) {
+  const { uid, name } = (await authenticateFirebaseToken(
+    headers()
+  )) as DecodedIdToken;
+  if (uid) {
+    const teamNumber = _request.nextUrl.searchParams.get("teamNumber");
+    const db = admin.firestore();
+    const docRef = await db.doc(`scouting/${teamNumber}`).get();
+    if (docRef.exists) {
+      return NextResponse.json(docRef.data());
+    }
+  } else {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+}
+
 export async function POST(_request: NextRequest) {
   const { uid, name } = (await authenticateFirebaseToken(
     headers()
