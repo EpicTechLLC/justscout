@@ -1,12 +1,41 @@
+import { BlueAllianceLinks } from "@/app/enums/BlueAllianceLinks";
+import { IBlueAllianceTeamSimple } from "@/app/types/IBlueAllianceTeamSimple";
+import { IColumnProperties } from "@/app/types/IColumnProperties";
 import { IEventInfo } from "@/app/types/IEventInfo";
 import { IJustScoutCollection } from "@/app/types/IJustScoutCollection";
-import { ISharedEventInfo } from "@/app/types/ISharedEventInfo";
+import { IRecord } from "@/app/types/IRecord";
 import authenticateFirebaseToken from "@/app/util/authenticateFirebaseToken";
 import blueAllianceAPI from "@/app/util/blueallianceapi";
+import uniqueID from "@/app/util/uniqueID";
 import admin from "firebase-admin";
 import { DecodedIdToken } from "firebase-admin/auth";
 import { headers } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
+
+async function createRecords(eventID: string, columns: IColumnProperties[]) {
+  const BAResult = (await blueAllianceAPI()
+    .get(`event/${eventID}/teams/simple`)
+    .json()) as IBlueAllianceTeamSimple[];
+  let records: any = {};
+  for (const result of BAResult) {
+    let newRecord: IRecord[] = [];
+    for (const col of columns) {
+      const newRow: IRecord = {
+        id: col.id,
+        value: "",
+      };
+      if (col.blueAllianceLink) {
+        const linkKey = Object.values(BlueAllianceLinks).find(
+          (BAKey) => BAKey === col.blueAllianceLink
+        );
+        newRow.value = result[linkKey as BlueAllianceLinks];
+      }
+      newRecord.push(newRow);
+    }
+    records[uniqueID()] = newRecord;
+  }
+  return records;
+}
 
 async function CreateData(
   teamNumber: string,
@@ -40,7 +69,7 @@ export async function POST(_request: NextRequest) {
       const now = Date.now();
       const docData: IJustScoutCollection = {
         columns: columns,
-        records: [],
+        records: await createRecords(eventID, columns),
       };
       const referenceData: IEventInfo = {
         modified: now,
@@ -50,10 +79,6 @@ export async function POST(_request: NextRequest) {
         eventId: "",
       };
 
-      //   const BAResult = await blueAllianceAPI()
-      //     .get(`event/${eventID}/teams`)
-      //     .json();
-      //   console.log(BAResult);
       CreateData(teamNumber, eventID, referenceData, docData);
     } else {
       console.error(

@@ -1,3 +1,4 @@
 export enum DataTypes {
-  TEXT,
+  TEXT = "Text",
+  NUMBER = "Number",
 }

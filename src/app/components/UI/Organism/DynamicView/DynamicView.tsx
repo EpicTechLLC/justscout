@@ -20,14 +20,12 @@ export default function DynamicView({
   records,
   onChange,
   title,
-  readonly = false,
 }: DynamicViewProps) {
   function updateRecord(val: any, col: IColumnProperties) {
     if (onChange) {
       onChange({
         id: col.id,
         value: val,
-        readOnly: false,
       } as IRecord);
     }
   }

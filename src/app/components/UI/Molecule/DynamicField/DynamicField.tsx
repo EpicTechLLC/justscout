@@ -19,8 +19,10 @@ export default function DynamicField({
   function getField() {
     switch (dataType) {
       case DataTypes.TEXT:
+      case DataTypes.NUMBER:
         return (
           <TextField
+            type={dataType === DataTypes.NUMBER ? "number" : "text"}
             fullWidth
             label={label}
             value={value}
@@ -30,6 +32,7 @@ export default function DynamicField({
         );
 
       default:
+        console.error(dataType);
         break;
     }
   }

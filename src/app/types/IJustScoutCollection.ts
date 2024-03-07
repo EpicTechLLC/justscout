@@ -3,5 +3,5 @@ import { IRecord } from "./IRecord";
 
 export interface IJustScoutCollection {
   columns: IColumnProperties[];
-  records: IRecord[];
+  records: { [key: string]: IRecord[] };
 }

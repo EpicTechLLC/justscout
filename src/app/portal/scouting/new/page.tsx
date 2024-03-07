@@ -3,7 +3,6 @@
 import { AppUserContext } from "@/app/Context/AppUserContext";
 import DynamicForm from "@/app/components/UI/Molecule/DynamicForm/DynamicForm";
 import BAEventSelector from "@/app/components/UI/Organism/BAEventSelector/BAEventSelector";
-import ColumnEditor from "@/app/components/UI/Organism/ColumnEditor/ColumnEditor";
 import DynamicEditor from "@/app/components/UI/Organism/DynamicEditor/DynamicEditor";
 import DynamicView from "@/app/components/UI/Organism/DynamicView/DynamicView";
 import StepperWrapperTemplate from "@/app/components/UI/Template/StepperWrapperTemplate/StepperWrapperTemplate";
@@ -12,13 +11,14 @@ import { IBlueAllianceEventSimple } from "@/app/types/IBlueAllianceEventSimple";
 import { IColumnProperties } from "@/app/types/IColumnProperties";
 import { IRecord } from "@/app/types/IRecord";
 import addColumn from "@/app/util/addColumn";
+import addDefaultColumns from "@/app/util/addDefaultColumns";
 import firebaseRequest from "@/app/util/firebaseRequest";
 import removeCol from "@/app/util/removeCol";
 import updateColumns from "@/app/util/updateColumns";
 import updateRecords from "@/app/util/updateRecords";
 import { User } from "firebase/auth";
 import ky from "ky";
-import { useCallback, useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 
 export default function ScoutingNew() {
   const { user, userInfo, loadingUser } = useContext(AppUserContext);
@@ -45,6 +45,11 @@ export default function ScoutingNew() {
   }, [loadingUser]);
 
   useEffect(() => {
+    if (0 === columns.length) {
+      addDefaultColumns(setColumns);
+    }
+  }, []);
+  useEffect(() => {
     validateColumns();
   }, [columns]);
 
@@ -68,8 +73,7 @@ export default function ScoutingNew() {
       recordList.push({
         id: column.id,
         value: "",
-        readOnly: false,
-      });
+      } as IRecord);
     }
     setExampleRecords(recordList);
     setValid(true);
@@ -97,7 +101,6 @@ export default function ScoutingNew() {
       return;
     }
   }
-
   return (
     <StepperWrapperTemplate
       valid={valid}
@@ -120,7 +123,6 @@ export default function ScoutingNew() {
         <DynamicView
           title={`This is what your scout team will see for ${eventName}`}
           columns={columns}
-          readonly
           records={exampleRecords}
           onChange={(change) => {
             updateRecords(change, exampleRecords, setExampleRecords);

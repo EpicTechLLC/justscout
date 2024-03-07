@@ -37,7 +37,7 @@ export default function DynamicEditor({
         <Card variant="outlined">
           <CardContent>
             {columns?.map((column, index) => (
-              <div key={index}>
+              <div key={column.id}>
                 {index > 0 ? <Divider /> : null}
                 <DynamicForm
                   {...column}

@@ -6,7 +6,6 @@ export default function updateColumns(
   setColumns: (columns: IColumnProperties[]) => void
 ) {
   const newColumns = [];
-
   for (const item of columns) {
     if (item.id === column.id) {
       newColumns.push(column);
