@@ -14,7 +14,7 @@ export async function GET(_request: NextRequest) {
     const snapshot = await ref.once("value", function (snapshot) {
       return snapshot.val();
     });
-    return NextResponse.json(snapshot);
+    return NextResponse.json(snapshot.val());
   } else {
     return NextResponse.json({ status: 401 });
   }

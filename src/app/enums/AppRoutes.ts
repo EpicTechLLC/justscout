@@ -11,4 +11,5 @@ export enum AppRoutes {
   FEEDBACKTHANKYOU = "/feedback-thank-you",
   SCOUTING = "/portal/scouting",
   SCOUTING_NEW = "/portal/scouting/new",
+  SCOUTING_EVENT = "/portal/scouting/event",
 }

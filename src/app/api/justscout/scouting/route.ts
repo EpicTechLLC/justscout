@@ -69,6 +69,8 @@ export async function GET(_request: NextRequest) {
     const docRef = await db.doc(`scouting/${teamNumber}`).get();
     if (docRef.exists) {
       return NextResponse.json(docRef.data());
+    } else {
+      return new NextResponse();
     }
   } else {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });

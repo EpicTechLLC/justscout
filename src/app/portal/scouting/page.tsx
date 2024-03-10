@@ -31,7 +31,11 @@ export default function TeamEventAdd() {
     <ScoutingDashboard
       permissions={permission}
       eventList={eventList}
-      navigateEvent={() => {}}
+      navigateEvent={(event: IEventInfo) =>
+        router.push(
+          `${AppRoutes.SCOUTING_EVENT}?eventId=${event.eventId}&id=${event.id}`
+        )
+      }
       navigateNew={() => router.push(AppRoutes.SCOUTING_NEW)}
     />
   );

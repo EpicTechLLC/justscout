@@ -5,9 +5,10 @@ import firstAPI from "@/app/util/firstapi";
 import { headers } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 import admin from "firebase-admin";
-import { IAppUser } from "@/app/types/IAppUser";
 import { DecodedIdToken } from "firebase-admin/auth";
 import { ITeamMember } from "@/app/types/ITeamMember";
+import { PermissionTypes } from "@/app/enums/PermissionTypes";
+import { IUserInfo } from "@/app/types/IUserInfo";
 
 export async function GET(
   _request: NextRequest,
@@ -38,12 +39,13 @@ export async function GET(
         return NextResponse.error();
       }
     }
-    const userData: IAppUser = {
+    const userData: IUserInfo = {
       createdTimestamp: Date.now(),
       displayName: name,
-      teamNumber: Number(teamNumber),
+      teamNumber: teamNumber,
       email: String(email),
       emailVerified: Boolean(email_verified),
+      role: PermissionTypes.MEMBER,
     };
     const userDataStripped: ITeamMember = {
       joinedTimestamp: userData.createdTimestamp,

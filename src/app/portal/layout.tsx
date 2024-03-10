@@ -48,25 +48,26 @@ export default function PortalLayout({
     setLocalLoading(true);
     const api = firebaseRequest(user as User);
     let result = (await api
-      ?.get("/api/settings/account-info")
+      .get("/api/settings/account-info")
       .json()) as IUserInfo;
     if (result === null) {
       router.replace(AppRoutes.SIGNUP);
     } else if (pathname === AppRoutes.SIGNUP) {
       router.replace(AppRoutes.ACCOUNT);
     }
-    setUserInfo(result);
-    setLocalLoading(false);
 
-    if (userInfo?.role === PermissionTypes.ADMIN) {
+    if (result?.role === PermissionTypes.ADMIN) {
       setPermission(admin);
-    } else if (!userInfo?.role && userInfo?.role === PermissionTypes.MEMBER) {
+    } else {
       setPermission(member);
     }
+
+    setUserInfo(result);
+    setLocalLoading(false);
   }
   useEffect(() => {
     if (!loadingAuth) {
-      if (user === null) {
+      if (user === null || !user) {
         router.replace(AppRoutes.LOGIN);
         return;
       }

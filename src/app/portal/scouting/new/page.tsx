@@ -18,6 +18,7 @@ import updateColumns from "@/app/util/updateColumns";
 import updateRecords from "@/app/util/updateRecords";
 import { User } from "firebase/auth";
 import ky from "ky";
+import { useRouter } from "next/navigation";
 import { useContext, useEffect, useState } from "react";
 
 export default function ScoutingNew() {
@@ -30,7 +31,7 @@ export default function ScoutingNew() {
   const [columns, setColumns] = useState<IColumnProperties[]>([]);
   const [exampleRecords, setExampleRecords] = useState<IRecord[]>([]);
   const [valid, setValid] = useState(false);
-
+  const router = useRouter();
   async function getTeamEvents() {
     let result = (await ky
       .get(`/api/blue-alliance/events/${userInfo?.teamNumber}`)
@@ -88,8 +89,10 @@ export default function ScoutingNew() {
       teamNumber: userInfo?.teamNumber,
     };
     const api = firebaseRequest(user as User);
-    await api.post("/api/justscout/scouting", { json: data }).json();
-    //router.push(`${AppRoutes.TEAM}/${userInfo?.teamNumber}`);
+    const result = await api
+      .post("/api/justscout/scouting", { json: data })
+      .json();
+    router.push(AppRoutes.SCOUTING);
   }
 
   function stepUpdated(stepNumber: number) {
