@@ -71,6 +71,9 @@ export default function ScoutingEventView({
   };
   return (
     <Grid container spacing={3}>
+      <Grid item xl={10} lg={10} md={12} sm={12} xs={12}>
+        <Typography variant="h4">{name}</Typography>
+      </Grid>
       <Grid item xl={1} lg={1} md={1} sm={2} xs={3}>
         <Button
           variant="contained"
@@ -88,9 +91,7 @@ export default function ScoutingEventView({
           </Button>
         </Grid>
       ) : null}
-      <Grid item xl={10} lg={10} md={12} sm={12} xs={12}>
-        <Typography variant="h4">{name}</Typography>
-      </Grid>
+
       <Grid item xl={12} lg={12} md={12} sm={12} xs={12}>
         <TeamList
           onRowClick={(row: any) => displayRow(row)}
