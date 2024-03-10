@@ -3,11 +3,9 @@ import {
   Button,
   Typography,
   Dialog,
-  DialogTitle,
   DialogContent,
   DialogActions,
 } from "@mui/material";
-import HomeIcon from "@mui/icons-material/Home";
 import ScheduleIcon from "@mui/icons-material/Schedule";
 import EditIcon from "@mui/icons-material/Edit";
 import { IPermission } from "@/app/types/IPermission";
@@ -19,8 +17,6 @@ import updateRecords from "@/app/util/updateRecords";
 import { AppRoutes } from "@/app/enums/AppRoutes";
 
 export type ScoutingEventViewProps = {
-  navigate: () => void;
-  id: any;
   permissions: IPermission;
   name: string;
   columns: any;
@@ -33,8 +29,6 @@ export type ScoutingEventViewProps = {
 };
 
 export default function ScoutingEventView({
-  navigate,
-  id,
   permissions,
   name,
   columns,
@@ -58,7 +52,6 @@ export default function ScoutingEventView({
   const displayRow = (row: string[]) => {
     setCurrentTeamID(row[3]);
     const rec = records[row[3]];
-
     setCurrentTeam(rec);
     setOldRecord(Object.assign({}, rec));
     setDynamicDialog(true);
@@ -94,7 +87,7 @@ export default function ScoutingEventView({
 
       <Grid item xl={12} lg={12} md={12} sm={12} xs={12}>
         <TeamList
-          onRowClick={(row: any) => displayRow(row)}
+          onRowClick={(row: string[]) => displayRow(row)}
           data={recordList}
           rankLoad={rankLoad}
           columns={["Rank", "Team Number", "Team Name"]}

@@ -3,7 +3,8 @@ import { AppUserContext } from "@/app/Context/AppUserContext";
 import Loading from "@/app/components/UI/Atom/Loading";
 import ScoutingEventView from "@/app/components/UI/Template/ScoutingEventView/ScoutingEventView";
 import { AppRoutes } from "@/app/enums/AppRoutes";
-import { BlueAllianceLinks } from "@/app/enums/BlueAllianceLinks";
+import { BlueAllianceAdvLinks } from "@/app/enums/BlueAllianceAdvLinks";
+import { BlueAllianceSimpleLinks } from "@/app/enums/BlueAllianceSimpleLinks";
 import { IEventInfo } from "@/app/types/IEventInfo";
 import { IJustScoutCollection } from "@/app/types/IJustScoutCollection";
 import { IRecord } from "@/app/types/IRecord";
@@ -21,6 +22,7 @@ export default function ScoutingView() {
   const [justScoutCollection, setJustScoutCollection] =
     useState<IJustScoutCollection>();
   const [eventName, setEventName] = useState("");
+  const [rankLoading, setRankLoading] = useState(false);
   const router = useRouter();
   async function getEventData() {
     const result = (await firebaseRequest(user as User)
@@ -34,13 +36,14 @@ export default function ScoutingView() {
 
     setEventName(result.eventInfo.name);
     //Extract columns that we need for table columns
-    //TODO: add rankings to this list.
     const columnIds = ["", "", ""];
     for (const col of result.justScoutCollection.columns) {
-      if (BlueAllianceLinks.TEAM_NUMBER === col.blueAllianceLink) {
+      if (BlueAllianceSimpleLinks.TEAM_NUMBER === col.blueAllianceLink) {
         columnIds[1] = col.id;
-      } else if (BlueAllianceLinks.NAME === col.blueAllianceLink) {
+      } else if (BlueAllianceSimpleLinks.NAME === col.blueAllianceLink) {
         columnIds[2] = col.id;
+      } else if (BlueAllianceAdvLinks.RANK === col.blueAllianceLink) {
+        columnIds[0] = col.id;
       }
     }
     //Get formatted record data for recordsList
@@ -50,7 +53,9 @@ export default function ScoutingView() {
       let recordData = records[recordsKey];
       let recordResult = ["", "", "", recordsKey];
       for (const record of recordData) {
-        if (record.id === columnIds[1]) {
+        if (record.id === columnIds[0]) {
+          recordResult[0] = record.value as string;
+        } else if (record.id === columnIds[1]) {
           recordResult[1] = record.value as string;
         } else if (record.id === columnIds[2]) {
           recordResult[2] = record.value as string;
@@ -63,7 +68,7 @@ export default function ScoutingView() {
   }
 
   useEffect(() => {
-    getEventData();
+    updateRankings();
   }, []);
 
   async function updateTeam(record: IRecord[], recordId: string) {
@@ -81,19 +86,29 @@ export default function ScoutingView() {
     await getEventData();
   }
 
+  async function updateRankings() {
+    setRankLoading(true);
+    const api = firebaseRequest(user as User);
+    await api
+      .get(
+        `/api/justscout/scouting/event/update-rankings?teamNumber=${userInfo?.teamNumber}&eventId=${eventId}&id=${id}`
+      )
+      .json();
+    setRankLoading(false);
+    await getEventData();
+  }
+
   if (!justScoutCollection) {
     return <Loading />;
   }
   return (
     <ScoutingEventView
-      navigate={() => {}}
-      id={undefined}
       permissions={permission}
       name={eventName}
       columns={justScoutCollection?.columns}
       updateTeamProp={updateTeam}
-      rankLoad={false}
-      updateRanking={() => {}}
+      rankLoad={rankLoading}
+      updateRanking={updateRankings}
       recordsProp={justScoutCollection?.records}
       recordListProp={recordsList}
       navigateEdit={() =>

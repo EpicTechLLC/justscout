@@ -1,4 +1,5 @@
-import { BlueAllianceLinks } from "../enums/BlueAllianceLinks";
+import { BlueAllianceAdvLinks } from "../enums/BlueAllianceAdvLinks";
+import { BlueAllianceSimpleLinks } from "../enums/BlueAllianceSimpleLinks";
 import { DataTypes } from "../enums/DataTypes";
 
 export interface IColumnProperties {
@@ -6,6 +7,6 @@ export interface IColumnProperties {
   label: string;
   value: unknown;
   dataType?: DataTypes;
-  blueAllianceLink?: BlueAllianceLinks;
+  blueAllianceLink?: BlueAllianceSimpleLinks | BlueAllianceAdvLinks;
   readOnly?: boolean;
 }

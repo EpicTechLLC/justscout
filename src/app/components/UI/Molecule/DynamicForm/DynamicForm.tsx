@@ -6,7 +6,8 @@ import TextField from "@mui/material/TextField";
 import { IColumnProperties } from "@/app/types/IColumnProperties";
 import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 import { DataTypes } from "@/app/enums/DataTypes";
-import { BlueAllianceLinks } from "@/app/enums/BlueAllianceLinks";
+import { BlueAllianceSimpleLinks } from "@/app/enums/BlueAllianceSimpleLinks";
+import { BlueAllianceAdvLinks } from "@/app/enums/BlueAllianceAdvLinks";
 
 export interface ColumnEditProps extends IColumnProperties {
   remove?: (id: string) => unknown;
@@ -28,7 +29,7 @@ export default function DynamicForm({
     dataType ? dataType : DataTypes.TEXT
   );
   const [blueAllianceLinkLocal, setBlueAllianceLinkLocal] = useState<
-    BlueAllianceLinks | undefined
+    BlueAllianceSimpleLinks | undefined | BlueAllianceAdvLinks
   >(blueAllianceLink);
 
   const update = useCallback(() => {
@@ -93,13 +94,20 @@ export default function DynamicForm({
             label="blue-alliance-link-select"
             onChange={(e) =>
               e.target.value
-                ? setBlueAllianceLinkLocal(e.target.value as BlueAllianceLinks)
+                ? setBlueAllianceLinkLocal(
+                    e.target.value as BlueAllianceSimpleLinks
+                  )
                 : null
             }
             disabled={readOnly}
           >
             <MenuItem value={undefined}>None</MenuItem>
-            {Object.values(BlueAllianceLinks).map((key) => (
+            {Object.values(BlueAllianceSimpleLinks).map((key) => (
+              <MenuItem key={key} value={key}>
+                {key}
+              </MenuItem>
+            ))}
+            {Object.values(BlueAllianceAdvLinks).map((key) => (
               <MenuItem key={key} value={key}>
                 {key}
               </MenuItem>

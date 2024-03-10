@@ -1,4 +1,5 @@
-import { BlueAllianceLinks } from "../enums/BlueAllianceLinks";
+import { BlueAllianceAdvLinks } from "../enums/BlueAllianceAdvLinks";
+import { BlueAllianceSimpleLinks } from "../enums/BlueAllianceSimpleLinks";
 import { DataTypes } from "../enums/DataTypes";
 import { IColumnProperties } from "../types/IColumnProperties";
 import uniqueID from "./uniqueID";
@@ -9,7 +10,7 @@ const defaultColumns: IColumnProperties[] = [
     label: "Team Number",
     value: "",
     dataType: DataTypes.NUMBER,
-    blueAllianceLink: BlueAllianceLinks.TEAM_NUMBER,
+    blueAllianceLink: BlueAllianceSimpleLinks.TEAM_NUMBER,
     readOnly: true,
   },
   {
@@ -17,7 +18,15 @@ const defaultColumns: IColumnProperties[] = [
     label: "Team Name",
     value: "",
     dataType: DataTypes.TEXT,
-    blueAllianceLink: BlueAllianceLinks.NAME,
+    blueAllianceLink: BlueAllianceSimpleLinks.NAME,
+    readOnly: true,
+  },
+  {
+    id: uniqueID(),
+    label: "Rank",
+    value: "",
+    dataType: DataTypes.NUMBER,
+    blueAllianceLink: BlueAllianceAdvLinks.RANK,
     readOnly: true,
   },
 ];

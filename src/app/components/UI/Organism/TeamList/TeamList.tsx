@@ -1,4 +1,8 @@
+import IconButton from "@mui/material/IconButton";
+import Tooltip from "@mui/material/Tooltip";
 import MUIDataTable, { MUIDataTableOptions } from "mui-datatables";
+import Refresh from "@mui/icons-material/Refresh";
+import CircularProgress from "@mui/material/CircularProgress";
 
 export type TeamListProps = {
   data: any[];
@@ -31,15 +35,23 @@ export default function TeamList({
       var row = data[rowData.dataIndex];
       onRowClick(row);
     },
-    // customToolbar: () => {
-    //   return (
-    //     <TeamListToolbar
-    //       getRankings={() => getRankings()}
-    //       addNew={() => addNew()}
-    //       rankLoad={rankLoad}
-    //     />
-    //   );
-    // },
+    customToolbar: () => {
+      return (
+        <>
+          {!rankLoad ? (
+            <Tooltip title={"Update Rankings"}>
+              <IconButton onClick={() => getRankings()} size="large">
+                <Refresh />
+              </IconButton>
+            </Tooltip>
+          ) : (
+            <IconButton size="large">
+              <CircularProgress color="inherit" size="1.3rem" />
+            </IconButton>
+          )}
+        </>
+      );
+    },
   };
   return (
     <MUIDataTable

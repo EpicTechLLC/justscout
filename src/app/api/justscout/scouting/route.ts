@@ -1,4 +1,4 @@
-import { BlueAllianceLinks } from "@/app/enums/BlueAllianceLinks";
+import { BlueAllianceSimpleLinks } from "@/app/enums/BlueAllianceSimpleLinks";
 import { IBlueAllianceTeamSimple } from "@/app/types/IBlueAllianceTeamSimple";
 import { IColumnProperties } from "@/app/types/IColumnProperties";
 import { IEventInfo } from "@/app/types/IEventInfo";
@@ -26,10 +26,12 @@ async function createRecords(eventID: string, columns: IColumnProperties[]) {
         value: "",
       };
       if (col.blueAllianceLink) {
-        const linkKey = Object.values(BlueAllianceLinks).find(
+        const linkKey = Object.values(BlueAllianceSimpleLinks).find(
           (BAKey) => BAKey === col.blueAllianceLink
         );
-        newRow.value = result[linkKey as BlueAllianceLinks];
+        if (linkKey) {
+          newRow.value = result[linkKey as BlueAllianceSimpleLinks];
+        }
       }
       newRecord.push(newRow);
     }
