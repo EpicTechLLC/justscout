@@ -9,6 +9,7 @@ import blueAllianceAPI from "@/app/util/blueallianceapi";
 import uniqueID from "@/app/util/uniqueID";
 import admin from "firebase-admin";
 import { DecodedIdToken } from "firebase-admin/auth";
+import { FieldValue } from "firebase-admin/firestore";
 import { headers } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -57,6 +58,35 @@ async function CreateData(
   await db.doc(`scouting/${teamNumber}`).set(referenceDoc, {
     merge: true,
   });
+  return docRef.id;
+}
+
+async function DeleteEvent(teamNumber: string, eventID: string, id: string) {
+  const db = admin.firestore();
+  const teamRef = db.doc(`scouting/${teamNumber}`);
+  await teamRef.update({
+    [id]: FieldValue.delete(),
+  });
+  await db.doc(`scouting/${teamNumber}/${eventID}/${id}`).delete();
+}
+async function UpdateEvent(
+  teamNumber: string,
+  referenceData: IEventInfo,
+  docData: IJustScoutCollection
+) {
+  const db = admin.firestore();
+  const teamRef = db.doc(`scouting/${teamNumber}`);
+  await teamRef.set(
+    {
+      [referenceData.id]: { ...referenceData },
+    },
+    {
+      merge: true,
+    }
+  );
+  await db
+    .doc(`scouting/${teamNumber}/${referenceData.eventId}/${referenceData.id}`)
+    .set({ columns: docData.columns }, { merge: true });
 }
 
 export async function GET(_request: NextRequest) {
@@ -96,8 +126,69 @@ export async function POST(_request: NextRequest) {
         id: "",
         eventId: "",
       };
-
-      CreateData(teamNumber, eventID, referenceData, docData);
+      return NextResponse.json(
+        {
+          id: await CreateData(teamNumber, eventID, referenceData, docData),
+        },
+        { status: 201 }
+      );
+    } else {
+      console.error(
+        `Data missing to add scouting event`,
+        eventID,
+        eventName,
+        columns,
+        teamNumber
+      );
+      return NextResponse.json(
+        { error: `Data missing to add scouting event` },
+        { status: 422 }
+      );
+    }
+  } else {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+}
+export async function PUT(_request: NextRequest) {
+  const { uid, name } = (await authenticateFirebaseToken(
+    headers()
+  )) as DecodedIdToken;
+  if (uid) {
+    const { id, oldEventId, eventID, eventName, columns, teamNumber } =
+      await _request.json();
+    if (id && oldEventId && eventID && eventName && columns && teamNumber) {
+      const now = Date.now();
+      const docData: IJustScoutCollection = {
+        columns: columns,
+        records: {},
+      };
+      const referenceData: IEventInfo = {
+        modified: now,
+        name: eventName,
+        modifiedByName: name,
+        id: "",
+        eventId: "",
+      };
+      if (oldEventId !== eventID) {
+        DeleteEvent(teamNumber, oldEventId, id);
+        docData.records = await createRecords(eventID, columns);
+        return NextResponse.json(
+          {
+            id: await CreateData(teamNumber, eventID, referenceData, docData),
+          },
+          { status: 201 }
+        );
+      } else {
+        referenceData.id = id;
+        referenceData.eventId = eventID;
+        await UpdateEvent(teamNumber, referenceData, docData);
+        return NextResponse.json(
+          {
+            id: id,
+          },
+          { status: 201 }
+        );
+      }
     } else {
       console.error(
         `Data missing to add scouting event`,

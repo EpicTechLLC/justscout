@@ -1,7 +1,6 @@
 "use client";
 import { AppUserContext } from "@/app/Context/AppUserContext";
 import Loading from "@/app/components/UI/Atom/Loading";
-import ScoutingDashboard from "@/app/components/UI/Template/ScoutingDashboardTemplate/ScoutingDashboardTemplate";
 import ScoutingEventView from "@/app/components/UI/Template/ScoutingEventView/ScoutingEventView";
 import { AppRoutes } from "@/app/enums/AppRoutes";
 import { BlueAllianceLinks } from "@/app/enums/BlueAllianceLinks";
@@ -23,7 +22,7 @@ export default function ScoutingView() {
     useState<IJustScoutCollection>();
   const [eventName, setEventName] = useState("");
   const router = useRouter();
-  async function getTeamEvents() {
+  async function getEventData() {
     const result = (await firebaseRequest(user as User)
       .get(
         `/api/justscout/scouting/event?teamNumber=${userInfo?.teamNumber}&eventId=${eventId}&id=${id}`
@@ -64,7 +63,7 @@ export default function ScoutingView() {
   }
 
   useEffect(() => {
-    getTeamEvents();
+    getEventData();
   }, []);
 
   async function updateTeam(record: IRecord[], recordId: string) {
@@ -79,7 +78,7 @@ export default function ScoutingView() {
     await api
       .post("/api/justscout/scouting/event/record", { json: data })
       .json();
-    await getTeamEvents();
+    await getEventData();
   }
 
   if (!justScoutCollection) {
@@ -97,7 +96,9 @@ export default function ScoutingView() {
       updateRanking={() => {}}
       recordsProp={justScoutCollection?.records}
       recordListProp={recordsList}
-      saveNewTeam={() => {}}
+      navigateEdit={() =>
+        router.push(`${AppRoutes.SCOUTING_EDIT}?eventId=${eventId}&id=${id}`)
+      }
     />
   );
 }

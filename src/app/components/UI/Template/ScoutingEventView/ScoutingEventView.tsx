@@ -16,6 +16,7 @@ import TeamList from "../../Organism/TeamList/TeamList";
 import { IRecord } from "@/app/types/IRecord";
 import DynamicView from "../../Organism/DynamicView/DynamicView";
 import updateRecords from "@/app/util/updateRecords";
+import { AppRoutes } from "@/app/enums/AppRoutes";
 
 export type ScoutingEventViewProps = {
   navigate: () => void;
@@ -28,7 +29,7 @@ export type ScoutingEventViewProps = {
   updateRanking: () => void;
   recordsProp: { [key: string]: IRecord[] };
   recordListProp: any[];
-  saveNewTeam: () => void;
+  navigateEdit: () => void;
 };
 
 export default function ScoutingEventView({
@@ -42,6 +43,7 @@ export default function ScoutingEventView({
   updateRanking,
   recordsProp,
   recordListProp,
+  navigateEdit,
 }: ScoutingEventViewProps) {
   const [dynamicDialog, setDynamicDialog] = useState(false);
   const [currentTeam, setCurrentTeam] = useState<IRecord[]>([]);
@@ -81,12 +83,7 @@ export default function ScoutingEventView({
       </Grid>
       {permissions.Update ? ( //Can user Update this event?
         <Grid item xl={1} lg={1} md={1} sm={2} xs={3}>
-          <Button
-            variant="contained"
-            onClick={() => {
-              //navigate("/Scouting/View/Edit?id=" + id);
-            }}
-          >
+          <Button variant="contained" onClick={navigateEdit}>
             &nbsp; <EditIcon />
           </Button>
         </Grid>

@@ -1,7 +1,5 @@
 "use client";
-
 import { AppUserContext } from "@/app/Context/AppUserContext";
-import DynamicForm from "@/app/components/UI/Molecule/DynamicForm/DynamicForm";
 import BAEventSelector from "@/app/components/UI/Organism/BAEventSelector/BAEventSelector";
 import DynamicEditor from "@/app/components/UI/Organism/DynamicEditor/DynamicEditor";
 import DynamicView from "@/app/components/UI/Organism/DynamicView/DynamicView";
@@ -9,20 +7,24 @@ import StepperWrapperTemplate from "@/app/components/UI/Template/StepperWrapperT
 import { AppRoutes } from "@/app/enums/AppRoutes";
 import { IBlueAllianceEventSimple } from "@/app/types/IBlueAllianceEventSimple";
 import { IColumnProperties } from "@/app/types/IColumnProperties";
+import { IEventInfo } from "@/app/types/IEventInfo";
+import { IJustScoutCollection } from "@/app/types/IJustScoutCollection";
 import { IRecord } from "@/app/types/IRecord";
 import addColumn from "@/app/util/addColumn";
-import addDefaultColumns from "@/app/util/addDefaultColumns";
 import firebaseRequest from "@/app/util/firebaseRequest";
 import removeCol from "@/app/util/removeCol";
 import updateColumns from "@/app/util/updateColumns";
 import updateRecords from "@/app/util/updateRecords";
 import { User } from "firebase/auth";
 import ky from "ky";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useContext, useEffect, useState } from "react";
 
 export default function ScoutingNew() {
   const { user, userInfo, loadingUser } = useContext(AppUserContext);
+  const searchParams = useSearchParams();
+  const eventId = searchParams.get("eventId");
+  const id = searchParams.get("id");
   const [teamEventsList, setTeamEventsList] = useState<
     IBlueAllianceEventSimple[]
   >([]);
@@ -31,6 +33,7 @@ export default function ScoutingNew() {
   const [columns, setColumns] = useState<IColumnProperties[]>([]);
   const [exampleRecords, setExampleRecords] = useState<IRecord[]>([]);
   const [valid, setValid] = useState(false);
+  const [oldEventInfo, setOldEventInfo] = useState<IEventInfo>();
   const router = useRouter();
   async function getTeamEvents() {
     let result = (await ky
@@ -39,17 +42,32 @@ export default function ScoutingNew() {
     setTeamEventsList(result);
   }
 
+  async function getEventData() {
+    const result = (await firebaseRequest(user as User)
+      .get(
+        `/api/justscout/scouting/event?teamNumber=${userInfo?.teamNumber}&eventId=${eventId}&id=${id}`
+      )
+      .json()) as {
+      eventInfo: IEventInfo;
+      justScoutCollection: IJustScoutCollection;
+    };
+
+    setEventName(result.eventInfo.name);
+    setEventID(result.eventInfo.eventId);
+    setColumns(result.justScoutCollection.columns);
+    setOldEventInfo(result.eventInfo);
+  }
+
+  useEffect(() => {
+    getEventData();
+  }, []);
+
   useEffect(() => {
     if (!loadingUser && userInfo?.teamNumber) {
       getTeamEvents();
     }
   }, [loadingUser]);
 
-  useEffect(() => {
-    if (0 === columns.length) {
-      addDefaultColumns(setColumns);
-    }
-  }, []);
   useEffect(() => {
     validateColumns();
   }, [columns]);
@@ -87,10 +105,12 @@ export default function ScoutingNew() {
       eventName,
       columns,
       teamNumber: userInfo?.teamNumber,
+      id: id,
+      oldEventId: oldEventInfo?.eventId,
     };
     const api = firebaseRequest(user as User);
     const result = (await api
-      .post("/api/justscout/scouting", { json: data })
+      .put("/api/justscout/scouting", { json: data })
       .json()) as { id: string };
     router.push(
       `${AppRoutes.SCOUTING_EVENT}?eventId=${eventID}&id=${result.id}`
