@@ -14,7 +14,6 @@ import TeamList from "../../Organism/TeamList/TeamList";
 import { IRecord } from "@/app/types/IRecord";
 import DynamicView from "../../Organism/DynamicView/DynamicView";
 import updateRecords from "@/app/util/updateRecords";
-import { AppRoutes } from "@/app/enums/AppRoutes";
 
 export type ScoutingEventViewProps = {
   permissions: IPermission;
@@ -26,6 +25,7 @@ export type ScoutingEventViewProps = {
   recordsProp: { [key: string]: IRecord[] };
   recordListProp: any[];
   navigateEdit: () => void;
+  navigateSchedule: () => void;
 };
 
 export default function ScoutingEventView({
@@ -38,6 +38,7 @@ export default function ScoutingEventView({
   recordsProp,
   recordListProp,
   navigateEdit,
+  navigateSchedule,
 }: ScoutingEventViewProps) {
   const [dynamicDialog, setDynamicDialog] = useState(false);
   const [currentTeam, setCurrentTeam] = useState<IRecord[]>([]);
@@ -68,12 +69,7 @@ export default function ScoutingEventView({
         <Typography variant="h4">{name}</Typography>
       </Grid>
       <Grid item xl={1} lg={1} md={1} sm={2} xs={3}>
-        <Button
-          variant="contained"
-          onClick={() => {
-            //navigate("/Scouting/View/Schedule?id=" + id);
-          }}
-        >
+        <Button variant="contained" onClick={navigateSchedule}>
           <ScheduleIcon />
         </Button>
       </Grid>

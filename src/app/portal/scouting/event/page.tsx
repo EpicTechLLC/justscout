@@ -114,6 +114,11 @@ export default function ScoutingView() {
       navigateEdit={() =>
         router.push(`${AppRoutes.SCOUTING_EDIT}?eventId=${eventId}&id=${id}`)
       }
+      navigateSchedule={() =>
+        router.push(
+          `${AppRoutes.SCOUTING_SCHEDULE}?eventId=${eventId}&id=${id}`
+        )
+      }
     />
   );
 }

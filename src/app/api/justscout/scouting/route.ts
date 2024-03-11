@@ -4,6 +4,7 @@ import { IColumnProperties } from "@/app/types/IColumnProperties";
 import { IEventInfo } from "@/app/types/IEventInfo";
 import { IJustScoutCollection } from "@/app/types/IJustScoutCollection";
 import { IRecord } from "@/app/types/IRecord";
+import { IRecords } from "@/app/types/IRecords";
 import authenticateFirebaseToken from "@/app/util/authenticateFirebaseToken";
 import blueAllianceAPI from "@/app/util/blueallianceapi";
 import uniqueID from "@/app/util/uniqueID";
@@ -17,7 +18,7 @@ async function createRecords(eventID: string, columns: IColumnProperties[]) {
   const BAResult = (await blueAllianceAPI()
     .get(`event/${eventID}/teams/simple`)
     .json()) as IBlueAllianceTeamSimple[];
-  let records: any = {};
+  let records: IRecords = {};
   for (const result of BAResult) {
     let newRecord: IRecord[] = [];
     for (const col of columns) {
@@ -38,6 +39,27 @@ async function createRecords(eventID: string, columns: IColumnProperties[]) {
     records[uniqueID()] = newRecord;
   }
   return records;
+}
+async function updateRecords(columns: IColumnProperties[], records: IRecords) {
+  let updatedRecords: IRecords = {};
+  for (const recordKey in records) {
+    const record = records[recordKey];
+    let updatedRecord: IRecord[] = [];
+    for (const col of columns) {
+      const recordItem = record.find((rec) => rec.id === col.id);
+      if (!recordItem) {
+        const newRow: IRecord = {
+          id: col.id,
+          value: "",
+        };
+        updatedRecord.push(newRow);
+      } else {
+        updatedRecord.push(recordItem);
+      }
+    }
+    updatedRecords[recordKey] = updatedRecord;
+  }
+  return updatedRecords;
 }
 
 async function CreateData(
@@ -88,7 +110,7 @@ async function UpdateEvent(
   );
   await db
     .doc(`scouting/${teamNumber}/${referenceData.eventId}/${referenceData.id}`)
-    .set({ columns: docData.columns }, { merge: true });
+    .set({ ...docData }, { merge: true });
 }
 
 export async function GET(_request: NextRequest) {
@@ -181,15 +203,24 @@ export async function PUT(_request: NextRequest) {
           { status: 201 }
         );
       } else {
-        referenceData.id = id;
-        referenceData.eventId = eventID;
-        await UpdateEvent(teamNumber, referenceData, docData);
-        return NextResponse.json(
-          {
-            id: id,
-          },
-          { status: 201 }
-        );
+        const db = admin.firestore();
+        const docRef = await db
+          .doc(`scouting/${teamNumber}/${eventID}/${id}`)
+          .get();
+        if (docRef.exists) {
+          referenceData.id = id;
+          referenceData.eventId = eventID;
+          const oldCollection = docRef.data() as IJustScoutCollection;
+          docData.records = await updateRecords(columns, oldCollection.records);
+
+          await UpdateEvent(teamNumber, referenceData, docData);
+          return NextResponse.json(
+            {
+              id: id,
+            },
+            { status: 201 }
+          );
+        }
       }
     } else {
       console.error(
