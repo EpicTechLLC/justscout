@@ -122,6 +122,16 @@ export default function ScheduleTemplate({
     setDynamicDialog(false);
   };
 
+  function sortByMatchType(
+    rowA: IBlueAllianceSchedule,
+    rowB: IBlueAllianceSchedule
+  ) {
+    if (rowA.actual_time && rowB.actual_time) {
+      return rowA.actual_time < rowB.actual_time ? 1 : -1;
+    } else {
+      return rowA.time < rowB.time ? 1 : -1;
+    }
+  }
   return (
     <Grid container spacing={3} justifyContent="center">
       <Grid item xs={12}>
@@ -156,7 +166,7 @@ export default function ScheduleTemplate({
               </TableRow>
             </TableHead>
             <TableBody>
-              {rows.map((match) => (
+              {rows.sort(sortByMatchType).map((match) => (
                 <React.Fragment key={match.time}>
                   <TableRow>
                     <TableCell
