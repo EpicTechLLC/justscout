@@ -24,8 +24,9 @@ export default function Schedule() {
   const [justScoutCollection, setJustScoutCollection] =
     useState<IJustScoutCollection>();
   async function getSchedule() {
-    let url = `/api/schedule?eventKey=${eventId}`;
-    const result = (await ky.get(url).json()) as any;
+    const result = (await ky
+      .get(`/api/schedule?eventKey=${eventId}`)
+      .json()) as any;
     setSchedule(result);
   }
   function setVisibleRows() {
@@ -43,6 +44,9 @@ export default function Schedule() {
         if (existOnBlue.length !== 0 || existOnRed.length !== 0) {
           newRows.push(row);
         }
+      }
+      if (newRows.length === 0) {
+        console.warn("No matches found", schedule, userInfo);
       }
       setRows(newRows);
     }
@@ -70,7 +74,7 @@ export default function Schedule() {
     if (schedule && !loadingUser) {
       setVisibleRows();
     }
-  }, [isTeam, schedule]);
+  }, [isTeam, schedule, loadingUser]);
   async function updateTeam(record: IRecord[], recordId: string) {
     const data = {
       eventId,
