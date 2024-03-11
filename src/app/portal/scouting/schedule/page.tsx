@@ -34,14 +34,15 @@ export default function Schedule() {
       setRows(schedule);
     } else {
       let newRows = [];
-      for (let row of schedule) {
-        const teamNumberStr = String(userInfo?.teamNumber);
+      const teamNumberStr = String(userInfo?.teamNumber);
+      for (const row of schedule) {
         const existOnRed = row.alliances.red.team_keys.filter(
           (x) => x.split("frc")[1] === teamNumberStr
         );
         const existOnBlue = row.alliances.blue.team_keys.filter(
           (x) => x.split("frc")[1] === teamNumberStr
         );
+        console.log(row.alliances);
         if (existOnBlue.length !== 0 || existOnRed.length !== 0) {
           newRows.push(row);
         }
