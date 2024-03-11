@@ -6,6 +6,7 @@ export enum AppRoutes {
   TEAM_PORTAL_EDIT = "/portal/team/edit",
   TEAMS = "/teams",
   ACCOUNT = "/portal/settings/account",
+  SETTINGS_TEAM = "/portal/settings/team",
   SIGNUP = "/portal/signup",
   FEEDBACK = "/portal/feedback",
   FEEDBACKTHANKYOU = "/feedback-thank-you",

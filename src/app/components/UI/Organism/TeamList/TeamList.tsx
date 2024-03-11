@@ -32,7 +32,7 @@ export default function TeamList({
     pagination: false,
     sortOrder: { name: "Rank", direction: "asc" },
     onRowClick: (event: any, rowData: any) => {
-      var row = data[rowData.dataIndex];
+      const row = data[rowData.dataIndex];
       onRowClick(row);
     },
     customToolbar: () => {

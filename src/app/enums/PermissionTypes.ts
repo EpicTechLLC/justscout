@@ -1,4 +1,4 @@
 export enum PermissionTypes {
-  ADMIN,
-  MEMBER,
+  ADMIN = "admin",
+  MEMBER = "member",
 }

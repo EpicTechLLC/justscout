@@ -11,6 +11,7 @@ import { AppRoutes } from "../enums/AppRoutes";
 import { AppUserContext } from "../Context/AppUserContext";
 import { IPermission } from "../types/IPermission";
 import { PermissionTypes } from "../enums/PermissionTypes";
+import { ITeamMember } from "../types/ITeamMember";
 
 const admin: IPermission = {
   Create: true,
@@ -50,13 +51,16 @@ export default function PortalLayout({
     let result = (await api
       .get("/api/settings/account-info")
       .json()) as IUserInfo;
-    if (result === null) {
+    let memberInfo = (await api
+      .get(`/api/settings/member-info?teamNumber=${result?.teamNumber}`)
+      .json()) as ITeamMember;
+    if (result === null || memberInfo === null) {
       router.replace(AppRoutes.SIGNUP);
     } else if (pathname === AppRoutes.SIGNUP) {
       router.replace(AppRoutes.ACCOUNT);
     }
 
-    if (result?.role === PermissionTypes.ADMIN) {
+    if (memberInfo?.role === PermissionTypes.ADMIN) {
       setPermission(admin);
     } else {
       setPermission(member);

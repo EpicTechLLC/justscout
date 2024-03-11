@@ -22,6 +22,7 @@ export async function GET(
     const db = admin.database();
     const teamRef = db.ref(`teams/${teamNumber}`);
     const snapshot = await teamRef.child(`Name`).once("value");
+    let role: PermissionTypes | undefined;
     if (snapshot.val() === null) {
       const api = firstAPI();
       const ancillary = (await api.get("").json()) as IFirstAncillary;
@@ -35,6 +36,7 @@ export async function GET(
 
       if (teamInfo && teamInfo.teams[0].nameShort) {
         teamRef.child("Name").set(teamInfo.teams[0].nameShort);
+        role = PermissionTypes.ADMIN;
       } else {
         return NextResponse.error();
       }
@@ -45,7 +47,6 @@ export async function GET(
       teamNumber: teamNumber,
       email: String(email),
       emailVerified: Boolean(email_verified),
-      role: PermissionTypes.MEMBER,
     };
     const userDataStripped: ITeamMember = {
       joinedTimestamp: userData.createdTimestamp,
@@ -53,9 +54,11 @@ export async function GET(
       displayName: userData.displayName,
       createdTimestamp: userData.createdTimestamp,
     };
+    if (role) {
+      userDataStripped.role = role;
+    }
     teamRef.child(`Members/${uid}`).set(userDataStripped);
     db.ref(`users/${uid}`).set(userData);
   }
-  //   return NextResponse.json({ error: "Error" }, { status: 404 });
   return new NextResponse();
 }
