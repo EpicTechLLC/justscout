@@ -95,7 +95,7 @@ export default function Schedule() {
       eventData={justScoutCollection}
       updateTeamProps={updateTeam}
       changeSchedule={() => setIsTeam(!isTeam)}
-      scheduleButtonView={"Team"}
+      scheduleButtonView={isTeam ? "Team" : "Full Schedule"}
     />
   );
 }

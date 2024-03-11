@@ -13,6 +13,7 @@ import {
   TableHead,
   TableBody,
   Box,
+  Typography,
 } from "@mui/material";
 import React, { useState } from "react";
 import { IBlueAllianceSchedule } from "@/app/types/IBlueAllainceSchedule";
@@ -166,177 +167,190 @@ export default function ScheduleTemplate({
               </TableRow>
             </TableHead>
             <TableBody>
-              {rows.sort(sortByMatchType).map((match) => (
-                <React.Fragment key={match.time}>
-                  <TableRow>
-                    <TableCell
-                      rowSpan={2}
-                      align="center"
-                      style={getBumperColor(match.alliances)}
-                    >
-                      {convertMatchType(match.comp_level)} {match.match_number}
-                    </TableCell>
-                    <TableCell rowSpan={2} align="center">
-                      {getDate(match.time)}
-                    </TableCell>
+              {rows.length === 0 ? (
+                <TableRow>
+                  <TableCell colSpan={6} align="center">
+                    Schedule isn't available yet
+                  </TableCell>
+                </TableRow>
+              ) : (
+                rows.sort(sortByMatchType).map((match) => (
+                  <React.Fragment key={match.time}>
+                    <TableRow>
+                      <TableCell
+                        rowSpan={2}
+                        align="center"
+                        style={getBumperColor(match.alliances)}
+                      >
+                        {convertMatchType(match.comp_level)}{" "}
+                        {match.match_number}
+                      </TableCell>
+                      <TableCell rowSpan={2} align="center">
+                        {getDate(match.time)}
+                      </TableCell>
 
-                    <TableCell
-                      rowSpan={1}
-                      align="center"
-                      sx={{
-                        fontSize: boldThisTeam(
-                          match.alliances.red.team_keys[0].replace("frc", "")
-                        )
-                          ? "bold"
-                          : "light",
-                        ...redMatch,
-                      }}
-                      onClick={() => {
-                        selectTeam(
-                          match.alliances.red.team_keys[0].replace("frc", "")
-                        );
-                      }}
-                    >
-                      {match.alliances.red.team_keys[0].replace("frc", "")}
-                    </TableCell>
-                    <TableCell
-                      rowSpan={1}
-                      align="center"
-                      sx={{
-                        fontWeight: boldThisTeam(
-                          match.alliances.red.team_keys[1].replace("frc", "")
-                        )
-                          ? "bold"
-                          : "light",
-                        ...redMatch,
-                      }}
-                      onClick={() => {
-                        selectTeam(
-                          match.alliances.red.team_keys[1].replace("frc", "")
-                        );
-                      }}
-                    >
-                      {match.alliances.red.team_keys[1].replace("frc", "")}
-                    </TableCell>
-                    <TableCell
-                      rowSpan={1}
-                      align="center"
-                      sx={{
-                        fontWeight: boldThisTeam(
-                          match.alliances.red.team_keys[2].replace("frc", "")
-                        )
-                          ? "bold"
-                          : "light",
-                        ...redMatch,
-                      }}
-                      onClick={() => {
-                        selectTeam(
-                          match.alliances.red.team_keys[2].replace("frc", "")
-                        );
-                      }}
-                    >
-                      {match.alliances.red.team_keys[2].replace("frc", "")}
-                    </TableCell>
-
-                    <TableCell
-                      rowSpan={1}
-                      colSpan={1.5}
-                      align="center"
-                      sx={{
-                        fontWeight:
-                          match.alliances.red.score > match.alliances.blue.score
+                      <TableCell
+                        rowSpan={1}
+                        align="center"
+                        sx={{
+                          fontSize: boldThisTeam(
+                            match.alliances.red.team_keys[0].replace("frc", "")
+                          )
                             ? "bold"
                             : "light",
-                        ...redMatch,
-                        border:
-                          match.alliances.red.score > match.alliances.blue.score
-                            ? "0.1rem solid white"
-                            : null,
-                      }}
-                    >
-                      {match.alliances.red.score}
-                    </TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell
-                      rowSpan={1}
-                      align="center"
-                      sx={{
-                        fontWeight: boldThisTeam(
-                          match.alliances.blue.team_keys[0].replace("frc", "")
-                        )
-                          ? "bold"
-                          : "light",
-                        ...blueMatch,
-                      }}
-                      onClick={() => {
-                        selectTeam(
-                          match.alliances.blue.team_keys[0].replace("frc", "")
-                        );
-                      }}
-                    >
-                      {match.alliances.blue.team_keys[0].replace("frc", "")}
-                    </TableCell>
-                    <TableCell
-                      rowSpan={1}
-                      align="center"
-                      sx={{
-                        fontWeight: boldThisTeam(
-                          match.alliances.blue.team_keys[1].replace("frc", "")
-                        )
-                          ? "bold"
-                          : "light",
-                        ...blueMatch,
-                      }}
-                      onClick={() => {
-                        selectTeam(
-                          match.alliances.blue.team_keys[1].replace("frc", "")
-                        );
-                      }}
-                    >
-                      {match.alliances.blue.team_keys[1].replace("frc", "")}
-                    </TableCell>
-                    <TableCell
-                      rowSpan={1}
-                      align="center"
-                      sx={{
-                        fontWeight: boldThisTeam(
-                          match.alliances.blue.team_keys[2].replace("frc", "")
-                        )
-                          ? "bold"
-                          : "light",
-                        ...blueMatch,
-                      }}
-                      onClick={() => {
-                        selectTeam(
-                          match.alliances.blue.team_keys[2].replace("frc", "")
-                        );
-                      }}
-                    >
-                      {match.alliances.blue.team_keys[2].replace("frc", "")}
-                    </TableCell>
-
-                    <TableCell
-                      rowSpan={1}
-                      colSpan={1.5}
-                      align="center"
-                      sx={{
-                        fontWeight:
-                          match.alliances.blue.score > match.alliances.red.score
+                          ...redMatch,
+                        }}
+                        onClick={() => {
+                          selectTeam(
+                            match.alliances.red.team_keys[0].replace("frc", "")
+                          );
+                        }}
+                      >
+                        {match.alliances.red.team_keys[0].replace("frc", "")}
+                      </TableCell>
+                      <TableCell
+                        rowSpan={1}
+                        align="center"
+                        sx={{
+                          fontWeight: boldThisTeam(
+                            match.alliances.red.team_keys[1].replace("frc", "")
+                          )
                             ? "bold"
                             : "light",
-                        ...blueMatch,
-                        border:
-                          match.alliances.blue.score > match.alliances.red.score
-                            ? "0.1rem solid white"
-                            : null,
-                      }}
-                    >
-                      {match.alliances.blue.score}
-                    </TableCell>
-                  </TableRow>
-                </React.Fragment>
-              ))}
+                          ...redMatch,
+                        }}
+                        onClick={() => {
+                          selectTeam(
+                            match.alliances.red.team_keys[1].replace("frc", "")
+                          );
+                        }}
+                      >
+                        {match.alliances.red.team_keys[1].replace("frc", "")}
+                      </TableCell>
+                      <TableCell
+                        rowSpan={1}
+                        align="center"
+                        sx={{
+                          fontWeight: boldThisTeam(
+                            match.alliances.red.team_keys[2].replace("frc", "")
+                          )
+                            ? "bold"
+                            : "light",
+                          ...redMatch,
+                        }}
+                        onClick={() => {
+                          selectTeam(
+                            match.alliances.red.team_keys[2].replace("frc", "")
+                          );
+                        }}
+                      >
+                        {match.alliances.red.team_keys[2].replace("frc", "")}
+                      </TableCell>
+
+                      <TableCell
+                        rowSpan={1}
+                        colSpan={1.5}
+                        align="center"
+                        sx={{
+                          fontWeight:
+                            match.alliances.red.score >
+                            match.alliances.blue.score
+                              ? "bold"
+                              : "light",
+                          ...redMatch,
+                          border:
+                            match.alliances.red.score >
+                            match.alliances.blue.score
+                              ? "0.1rem solid white"
+                              : null,
+                        }}
+                      >
+                        {match.alliances.red.score}
+                      </TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell
+                        rowSpan={1}
+                        align="center"
+                        sx={{
+                          fontWeight: boldThisTeam(
+                            match.alliances.blue.team_keys[0].replace("frc", "")
+                          )
+                            ? "bold"
+                            : "light",
+                          ...blueMatch,
+                        }}
+                        onClick={() => {
+                          selectTeam(
+                            match.alliances.blue.team_keys[0].replace("frc", "")
+                          );
+                        }}
+                      >
+                        {match.alliances.blue.team_keys[0].replace("frc", "")}
+                      </TableCell>
+                      <TableCell
+                        rowSpan={1}
+                        align="center"
+                        sx={{
+                          fontWeight: boldThisTeam(
+                            match.alliances.blue.team_keys[1].replace("frc", "")
+                          )
+                            ? "bold"
+                            : "light",
+                          ...blueMatch,
+                        }}
+                        onClick={() => {
+                          selectTeam(
+                            match.alliances.blue.team_keys[1].replace("frc", "")
+                          );
+                        }}
+                      >
+                        {match.alliances.blue.team_keys[1].replace("frc", "")}
+                      </TableCell>
+                      <TableCell
+                        rowSpan={1}
+                        align="center"
+                        sx={{
+                          fontWeight: boldThisTeam(
+                            match.alliances.blue.team_keys[2].replace("frc", "")
+                          )
+                            ? "bold"
+                            : "light",
+                          ...blueMatch,
+                        }}
+                        onClick={() => {
+                          selectTeam(
+                            match.alliances.blue.team_keys[2].replace("frc", "")
+                          );
+                        }}
+                      >
+                        {match.alliances.blue.team_keys[2].replace("frc", "")}
+                      </TableCell>
+
+                      <TableCell
+                        rowSpan={1}
+                        colSpan={1.5}
+                        align="center"
+                        sx={{
+                          fontWeight:
+                            match.alliances.blue.score >
+                            match.alliances.red.score
+                              ? "bold"
+                              : "light",
+                          ...blueMatch,
+                          border:
+                            match.alliances.blue.score >
+                            match.alliances.red.score
+                              ? "0.1rem solid white"
+                              : null,
+                        }}
+                      >
+                        {match.alliances.blue.score}
+                      </TableCell>
+                    </TableRow>
+                  </React.Fragment>
+                ))
+              )}
             </TableBody>
           </Table>
         </TableContainer>
