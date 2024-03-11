@@ -35,8 +35,7 @@ export default function Header() {
               textDecoration: "none",
               color: "inherit",
             }}
-            p={1}
-            pr={2}
+            m={0.25}
           >
             Teams
           </MUILink>
@@ -47,7 +46,7 @@ export default function Header() {
               textDecoration: "none",
               color: "inherit",
             }}
-            p={1}
+            m={0.5}
           >
             Scouting (beta)
           </MUILink>

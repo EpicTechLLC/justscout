@@ -5,7 +5,7 @@ import { DataTypes } from "../enums/DataTypes";
 export interface IColumnProperties {
   id: string;
   label: string;
-  value: string | number;
+  value: string | number | boolean;
   dataType?: DataTypes;
   blueAllianceLink?: BlueAllianceSimpleLinks | BlueAllianceAdvLinks;
   readOnly?: boolean;
