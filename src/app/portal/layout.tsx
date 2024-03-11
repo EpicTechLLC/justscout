@@ -9,6 +9,29 @@ import firebaseRequest from "../util/firebaseRequest";
 import { IUserInfo } from "../types/IUserInfo";
 import { AppRoutes } from "../enums/AppRoutes";
 import { AppUserContext } from "../Context/AppUserContext";
+import { IPermission } from "../types/IPermission";
+import { PermissionTypes } from "../enums/PermissionTypes";
+
+const admin: IPermission = {
+  Create: true,
+  Read: true,
+  Update: true,
+  Delete: true,
+};
+
+const member: IPermission = {
+  Create: false,
+  Read: true,
+  Update: false,
+  Delete: false,
+};
+
+const defaultPermission: IPermission = {
+  Create: false,
+  Read: false,
+  Update: false,
+  Delete: false,
+};
 
 export default function PortalLayout({
   children,
@@ -18,25 +41,33 @@ export default function PortalLayout({
   const [user, loadingAuth] = useAuthState(getAuth());
   const [localLoading, setLocalLoading] = useState(true);
   const [userInfo, setUserInfo] = useState<IUserInfo>();
+  const [permission, setPermission] = useState<IPermission>(defaultPermission);
   const pathname = usePathname();
   const router = useRouter();
   async function getInfo() {
     setLocalLoading(true);
     const api = firebaseRequest(user as User);
     let result = (await api
-      ?.get("/api/settings/account-info")
+      .get("/api/settings/account-info")
       .json()) as IUserInfo;
     if (result === null) {
       router.replace(AppRoutes.SIGNUP);
     } else if (pathname === AppRoutes.SIGNUP) {
       router.replace(AppRoutes.ACCOUNT);
     }
+
+    if (result?.role === PermissionTypes.ADMIN) {
+      setPermission(admin);
+    } else {
+      setPermission(member);
+    }
+
     setUserInfo(result);
     setLocalLoading(false);
   }
   useEffect(() => {
     if (!loadingAuth) {
-      if (user === null) {
+      if (user === null || !user) {
         router.replace(AppRoutes.LOGIN);
         return;
       }
@@ -53,6 +84,7 @@ export default function PortalLayout({
         user: user as User,
         loadingUser: localLoading,
         triggerUpdate: getInfo,
+        permission: permission,
       }}
     >
       {children}

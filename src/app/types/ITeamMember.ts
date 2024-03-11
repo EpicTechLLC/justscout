@@ -1,6 +1,6 @@
-import { IAppUser } from "./IAppUser";
+import { IUserInfo } from "./IUserInfo";
 
 export interface ITeamMember
-  extends Omit<IAppUser, "teamNumber" | "emailVerified"> {
+  extends Omit<IUserInfo, "teamNumber" | "emailVerified" | "role"> {
   joinedTimestamp: Date | number;
 }
