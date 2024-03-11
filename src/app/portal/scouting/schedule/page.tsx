@@ -33,17 +33,17 @@ export default function Schedule() {
     if (!isTeam) {
       setRows(schedule);
     } else {
-      let newRows = [];
+      let newRows: IBlueAllianceSchedule[] = [];
       const teamNumberStr = String(userInfo?.teamNumber);
       for (const row of schedule) {
-        const existOnRed = row.alliances.red.team_keys.filter(
+        const existOnRed = row.alliances.red.team_keys.find(
           (teamKey) => teamKey.split("frc")[1] === teamNumberStr
         );
-        const existOnBlue = row.alliances.blue.team_keys.filter(
+        const existOnBlue = row.alliances.blue.team_keys.find(
           (teamKey) => teamKey.split("frc")[1] === teamNumberStr
         );
-        console.log(row.alliances, teamNumberStr);
-        if (existOnBlue.length !== 0 || existOnRed.length !== 0) {
+        console.log(existOnRed, existOnBlue, teamNumberStr);
+        if (existOnBlue || existOnRed) {
           newRows.push(row);
         }
       }
@@ -70,7 +70,7 @@ export default function Schedule() {
   }, []);
 
   useEffect(() => {
-    if (schedule && !loadingUser) {
+    if (!loadingUser && schedule.length > 0) {
       setVisibleRows();
     }
   }, [isTeam, schedule, loadingUser]);
