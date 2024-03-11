@@ -9,6 +9,7 @@ import { Divider, Grid } from "@mui/material";
 import { usePathname } from "next/navigation";
 import { ISetting } from "@/app/types/ISettings";
 import ColorModeToggle from "../../Atom/ColorModeToggle/ColorModeToggle";
+import Link from "next/link";
 
 export interface SideBarProps extends PropsWithChildren {
   Settings: ISetting[];
@@ -64,7 +65,7 @@ export default function SideBar({ Settings, children }: SideBarProps) {
                   <ListItem key={index}>
                     <ListItemButton
                       selected={selected}
-                      component="a"
+                      component={Link}
                       href={setting.path}
                     >
                       <Typography variant="h5">{setting.title}</Typography>

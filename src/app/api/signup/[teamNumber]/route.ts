@@ -5,9 +5,10 @@ import firstAPI from "@/app/util/firstapi";
 import { headers } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 import admin from "firebase-admin";
-import { IAppUser } from "@/app/types/IAppUser";
 import { DecodedIdToken } from "firebase-admin/auth";
 import { ITeamMember } from "@/app/types/ITeamMember";
+import { PermissionTypes } from "@/app/enums/PermissionTypes";
+import { IUserInfo } from "@/app/types/IUserInfo";
 
 export async function GET(
   _request: NextRequest,
@@ -21,6 +22,7 @@ export async function GET(
     const db = admin.database();
     const teamRef = db.ref(`teams/${teamNumber}`);
     const snapshot = await teamRef.child(`Name`).once("value");
+    let role: PermissionTypes | undefined;
     if (snapshot.val() === null) {
       const api = firstAPI();
       const ancillary = (await api.get("").json()) as IFirstAncillary;
@@ -34,14 +36,15 @@ export async function GET(
 
       if (teamInfo && teamInfo.teams[0].nameShort) {
         teamRef.child("Name").set(teamInfo.teams[0].nameShort);
+        role = PermissionTypes.ADMIN;
       } else {
         return NextResponse.error();
       }
     }
-    const userData: IAppUser = {
+    const userData: IUserInfo = {
       createdTimestamp: Date.now(),
       displayName: name,
-      teamNumber: Number(teamNumber),
+      teamNumber: teamNumber,
       email: String(email),
       emailVerified: Boolean(email_verified),
     };
@@ -51,9 +54,11 @@ export async function GET(
       displayName: userData.displayName,
       createdTimestamp: userData.createdTimestamp,
     };
+    if (role) {
+      userDataStripped.role = role;
+    }
     teamRef.child(`Members/${uid}`).set(userDataStripped);
     db.ref(`users/${uid}`).set(userData);
   }
-  //   return NextResponse.json({ error: "Error" }, { status: 404 });
   return new NextResponse();
 }
