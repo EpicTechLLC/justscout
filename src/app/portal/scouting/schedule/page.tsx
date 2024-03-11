@@ -35,18 +35,16 @@ export default function Schedule() {
     } else {
       let newRows = [];
       for (let row of schedule) {
+        const teamNumberStr = String(userInfo?.teamNumber);
         const existOnRed = row.alliances.red.team_keys.filter(
-          (x) => x.split("frc")[1] === userInfo?.teamNumber
+          (x) => x.split("frc")[1] === teamNumberStr
         );
         const existOnBlue = row.alliances.blue.team_keys.filter(
-          (x) => x.split("frc")[1] === userInfo?.teamNumber
+          (x) => x.split("frc")[1] === teamNumberStr
         );
         if (existOnBlue.length !== 0 || existOnRed.length !== 0) {
           newRows.push(row);
         }
-      }
-      if (newRows.length === 0) {
-        console.warn("No matches found", schedule, userInfo);
       }
       setRows(newRows);
     }
