@@ -46,7 +46,7 @@ export default function Schedule() {
         }
       }
       if (newRows.length === 0) {
-        console.warn("No matches found", schedule);
+        console.warn("No matches found", schedule, userInfo);
       }
       setRows(newRows);
     }
