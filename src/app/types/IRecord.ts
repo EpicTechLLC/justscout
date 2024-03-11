@@ -1,4 +1,4 @@
 export interface IRecord {
   id: string;
-  value: string | number;
+  value: string | number | boolean;
 }
