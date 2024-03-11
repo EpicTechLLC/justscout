@@ -45,7 +45,9 @@ export async function GET(_request: NextRequest) {
               rank.team_key.split("frc")[1] ===
               String(record[teamNumberIndex].value)
           );
-          record[rankIndex].value = rankingData?.rank;
+          if (rankingData?.rank) {
+            record[rankIndex].value = rankingData.rank;
+          }
         }
         await db
           .doc(`scouting/${teamNumber}/${eventId}/${id}`)

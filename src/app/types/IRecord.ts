@@ -1,4 +1,4 @@
 export interface IRecord {
   id: string;
-  value: unknown;
+  value: string | number;
 }
