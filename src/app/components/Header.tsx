@@ -35,7 +35,8 @@ export default function Header() {
               textDecoration: "none",
               color: "inherit",
             }}
-            p={2}
+            p={1}
+            pr={2}
           >
             Teams
           </MUILink>
@@ -46,9 +47,9 @@ export default function Header() {
               textDecoration: "none",
               color: "inherit",
             }}
-            p={2}
+            p={1}
           >
-            Scouting
+            Scouting (beta)
           </MUILink>
           <AccountMenu
             user={user as User}
