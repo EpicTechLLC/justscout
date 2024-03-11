@@ -5,6 +5,7 @@ import { Key } from "react";
 import { IPermission } from "@/app/types/IPermission";
 import EventCard from "../../Organism/EventCard/EventCard";
 import { IEventInfo } from "@/app/types/IEventInfo";
+import { Typography } from "@mui/material";
 
 export type ScoutingDashboardProps = {
   permissions: IPermission;
@@ -31,13 +32,15 @@ export default function ScoutingDashboard({
         </Grid>
       ) : null}
       <Grid item container spacing={3} xl={12} lg={12} md={12} sm={12} xs={12}>
-        {eventList?.length === 0
-          ? null
-          : eventList?.map((event: any, index: Key | null | undefined) => (
-              <Grid key={index} item xl={4} lg={4} md={4} sm={12} xs={12}>
-                <EventCard {...event} goToEvent={() => navigateEvent(event)} />
-              </Grid>
-            ))}
+        {eventList?.length === 0 ? (
+          <Typography>There are no scouting events yet</Typography>
+        ) : (
+          eventList?.map((event: any, index: Key | null | undefined) => (
+            <Grid key={index} item xl={4} lg={4} md={4} sm={12} xs={12}>
+              <EventCard {...event} goToEvent={() => navigateEvent(event)} />
+            </Grid>
+          ))
+        )}
       </Grid>
     </Grid>
   );
