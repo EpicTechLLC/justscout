@@ -42,7 +42,6 @@ export default function Schedule() {
         const existOnBlue = row.alliances.blue.team_keys.find(
           (teamKey) => teamKey.split("frc")[1] === teamNumberStr
         );
-        console.log(existOnRed, existOnBlue, teamNumberStr);
         if (existOnBlue || existOnRed) {
           newRows.push(row);
         }

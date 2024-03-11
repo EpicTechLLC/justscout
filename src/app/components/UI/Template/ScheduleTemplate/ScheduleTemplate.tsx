@@ -22,6 +22,7 @@ import { IJustScoutCollection } from "@/app/types/IJustScoutCollection";
 import { BlueAllianceSimpleLinks } from "@/app/enums/BlueAllianceSimpleLinks";
 import { IRecord } from "@/app/types/IRecord";
 import updateRecords from "@/app/util/updateRecords";
+import { IBlueAllianceScheduleAlliance } from "@/app/types/IBlueAllianceScheduleAlliance";
 
 const redMatch = { backgroundColor: "#a62d2b", borderBottom: "1% solid #fff" };
 const blueMatch = {
@@ -84,14 +85,23 @@ export default function ScheduleTemplate({
   const boldThisTeam = (teamNum: string | number) => {
     return teamNumber === teamNum;
   };
-  const getBumperColor = (alliances: any) => {
-    for (var i in [0, 1, 2]) {
-      if (alliances.blue.team_keys[i].replace("frc", "") === teamNumber) {
-        return blueMatch;
-      } else if (alliances.red.team_keys[i].replace("frc", "") === teamNumber) {
-        return redMatch;
-      }
+  const getBumperColor = (alliances: {
+    red: IBlueAllianceScheduleAlliance;
+    blue: IBlueAllianceScheduleAlliance;
+  }) => {
+    const teamNumberStr = String(teamNumber);
+    const existOnRed = alliances.red.team_keys.find(
+      (teamKey) => teamKey.split("frc")[1] === teamNumberStr
+    );
+    const existOnBlue = alliances.blue.team_keys.find(
+      (teamKey) => teamKey.split("frc")[1] === teamNumberStr
+    );
+    if (existOnBlue) {
+      return blueMatch;
+    } else if (existOnRed) {
+      return redMatch;
     }
+
     return;
   };
   const selectTeam = (team: string) => {
