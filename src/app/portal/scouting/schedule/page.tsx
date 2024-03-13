@@ -15,7 +15,7 @@ import { useContext, useEffect, useState } from "react";
 export default function Schedule() {
   const { userInfo, user, permission, loadingUser } =
     useContext(AppUserContext);
-  const [rows, setRows] = useState<IBlueAllianceSchedule[]>();
+  const [rows, setRows] = useState<IBlueAllianceSchedule[]>([]);
   const searchParams = useSearchParams();
   const eventId = searchParams.get("eventId");
   const id = searchParams.get("id");
@@ -87,7 +87,7 @@ export default function Schedule() {
       .json();
     await getEventData();
   }
-  if (!rows || !justScoutCollection || !userInfo) {
+  if (!justScoutCollection || !userInfo) {
     return <Loading />;
   }
   return (

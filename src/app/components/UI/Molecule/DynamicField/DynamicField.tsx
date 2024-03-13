@@ -1,8 +1,12 @@
-import Typography from "@mui/material/Typography";
 import { IColumnProperties } from "@/app/types/IColumnProperties";
 import Grid from "@mui/material/Grid";
 import { DataTypes } from "@/app/enums/DataTypes";
-import { TextField } from "@mui/material";
+import {
+  Checkbox,
+  FormControlLabel,
+  FormGroup,
+  TextField,
+} from "@mui/material";
 import { IRecord } from "@/app/types/IRecord";
 
 export interface DynamicFieldProps extends IRecord, IColumnProperties {
@@ -30,7 +34,23 @@ export default function DynamicField({
             onChange={(e) => (onChange ? onChange(e.target.value) : null)}
           />
         );
-
+      case DataTypes.BOOLEAN:
+        return (
+          <FormGroup>
+            <FormControlLabel
+              label={label}
+              control={
+                <Checkbox
+                  checked={Boolean(value)}
+                  disabled={readOnly}
+                  onChange={(e) =>
+                    onChange ? onChange(e.target.checked) : null
+                  }
+                />
+              }
+            />
+          </FormGroup>
+        );
       default:
         console.error(dataType);
         break;

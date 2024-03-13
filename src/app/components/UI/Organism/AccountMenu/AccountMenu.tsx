@@ -41,7 +41,7 @@ export default function AccountMenu({
       <IconButton
         ref={buttonRef}
         aria-label={user ? "button-account-Menu" : "login"}
-        sx={{ color: "white", m: 1 }}
+        sx={{ color: "white" }}
         onClick={() => (user ? setIsOpen(true) : navigate(AppRoutes.LOGIN))}
       >
         <AccountCircleIcon fontSize="large" />
