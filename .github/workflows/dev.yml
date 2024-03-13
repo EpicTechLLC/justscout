@@ -10,8 +10,8 @@ jobs:
   Deploy-Preview:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: pnpm/action-setup@v3
+      - uses: actions/checkout@latest
+      - uses: pnpm/action-setup@latest
         with:
           version: 8
       - name: Install Vercel CLI
