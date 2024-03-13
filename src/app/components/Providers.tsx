@@ -8,9 +8,11 @@ import {
 import { PropsWithChildren, useMemo, useState } from "react";
 import firebase_app from "../util/firebaseConfig";
 import { ColorModeContext } from "../Context/ColorModeContext";
+import { getAnalytics } from "firebase/analytics";
 
 export default function Providers({ children }: PropsWithChildren) {
   const app = firebase_app;
+  const analytics = getAnalytics(app);
   const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
   const [mode, setMode] = useState<"light" | "dark">("dark");
   const [updatePreference, setUpdatePreference] = useState<boolean>(false);
