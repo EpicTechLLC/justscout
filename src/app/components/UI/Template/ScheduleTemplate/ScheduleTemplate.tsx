@@ -50,6 +50,7 @@ export default function ScheduleTemplate({
   const [dynamicDialog, setDynamicDialog] = useState(false);
   const [currentTeam, setCurrentTeam] = useState<IRecord[]>([]);
   const [currentTeamId, setCurrentTeamID] = useState<string>("");
+  const [sortMatchOrder, setSortMatchOrder] = useState(1);
   const getDate = (value: number) => {
     var date = new Date(value * 1000);
     var hours = date.getHours() > 12 ? date.getHours() - 12 : date.getHours();
@@ -138,11 +139,14 @@ export default function ScheduleTemplate({
     rowB: IBlueAllianceSchedule
   ) {
     if (rowA.actual_time && rowB.actual_time) {
-      return rowA.actual_time < rowB.actual_time ? 1 : -1;
+      return rowA.actual_time < rowB.actual_time
+        ? sortMatchOrder
+        : -sortMatchOrder;
     } else {
-      return rowA.time < rowB.time ? 1 : -1;
+      return rowA.time > rowB.time ? sortMatchOrder : -sortMatchOrder;
     }
   }
+  console.log(rows);
   return (
     <Grid container spacing={3} justifyContent="center">
       <Grid item xs={12}>
@@ -157,8 +161,13 @@ export default function ScheduleTemplate({
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell colSpan={1} rowSpan={2} align="center">
-                  Match #
+                <TableCell
+                  colSpan={1}
+                  rowSpan={2}
+                  align="center"
+                  onClick={() => setSortMatchOrder(sortMatchOrder * -1)}
+                >
+                  Match # {sortMatchOrder !== 1 ? <>&#8593;</> : <>&#8595;</>}
                 </TableCell>
                 <TableCell colSpan={1} rowSpan={2} align="center">
                   Date & Time
@@ -275,7 +284,9 @@ export default function ScheduleTemplate({
                               : null,
                         }}
                       >
-                        {match.alliances.red.score}
+                        {match.alliances.red.score === -1
+                          ? "-"
+                          : match.alliances.red.score}
                       </TableCell>
                     </TableRow>
                     <TableRow>
@@ -355,7 +366,9 @@ export default function ScheduleTemplate({
                               : null,
                         }}
                       >
-                        {match.alliances.blue.score}
+                        {match.alliances.blue.score === -1
+                          ? "-"
+                          : match.alliances.blue.score}
                       </TableCell>
                     </TableRow>
                   </React.Fragment>
