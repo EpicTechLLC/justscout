@@ -146,7 +146,6 @@ export default function ScheduleTemplate({
       return rowA.time > rowB.time ? sortMatchOrder : -sortMatchOrder;
     }
   }
-  console.log(rows);
   return (
     <Grid container spacing={3} justifyContent="center">
       <Grid item xs={12}>
