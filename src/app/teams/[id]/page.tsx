@@ -22,10 +22,8 @@ export default function Teams() {
       try {
         const res = await fetch(`/api/teams/${id}`);
         const data: Teams = await res.json();
-        setTeams(data);
         let teamsList = [];
         for (let team of data) {
-          console.log(team);
           teamsList.push({
             id: team.team_number,
             team_number: team.team_number,
