@@ -17,7 +17,6 @@ export default function Teams() {
   const id = params.id ? parseInt(params.id as string) : 0;
   const [isPending, startTransition] = useTransition();
   const [teams, setTeams] = useState<GridRowsProp>([]);
-  const isSmallScreen = useMediaQuery("(max-width:600px)");
   useEffect(() => {
     startTransition(async () => {
       try {
@@ -31,14 +30,13 @@ export default function Teams() {
             id: team.team_number,
             team_number: team.team_number,
             nickname: team.nickname,
+            location:
+              team.city && team.state_prov && team?.country
+                ? `${team.city} ${team?.state_prov}, ${team?.country}`
+                : "-",
           });
         }
         setTeams(teamsList);
-        // const rows: GridRowsProp = [
-        //   { id: 1, col1: "Hello", col2: "World" },
-        //   { id: 2, col1: "DataGridPro", col2: "is Awesome" },
-        //   { id: 3, col1: "MUI", col2: "is Amazing" },
-        // ];
       } catch (err) {
         console.error("Failed to fetch team data", err);
       }
@@ -46,19 +44,13 @@ export default function Teams() {
   }, [id]);
 
   const columns: GridColDef[] = [
-    { field: "team_number", headerName: "Number", minWidth: 1},
-    { field: "nickname", headerName: "Name" },
-    // { field: "state_prov", headerName: "Location", width: 150 },
+    { field: "team_number", headerName: "Number", flex: 1 },
+    { field: "nickname", headerName: "Name", flex: 1 },
+    { field: "location", headerName: "Location", flex: 1 },
   ];
-  console.log(teams);
   return (
     <Box>
-      <Box
-        display="inline-flex"
-        flexWrap="wrap" // Allows buttons to wrap to a new line
-        gap={0} // Adds spacing between buttons
-        pb={2}
-      >
+      <Box display="inline-flex" flexWrap="wrap" gap={0} pb={2}>
         {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((thisID) => (
           <Button
             key={thisID}
@@ -74,7 +66,11 @@ export default function Teams() {
         {isPending ? (
           <CircularProgress />
         ) : (
-          <DataGrid rows={teams} columns={columns} />
+          <DataGrid
+            rows={teams}
+            columns={columns}
+            onRowClick={(params) => router.push(`/team/${params.id}`)}
+          />
         )}
       </Box>
     </Box>
