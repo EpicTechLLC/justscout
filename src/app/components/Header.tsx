@@ -1,19 +1,6 @@
-import {
-  Box,
-  Typography,
-  Divider,
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemText,
-  CssBaseline,
-  AppBar,
-  Toolbar,
-  IconButton,
-  Button,
-  Drawer,
-} from "@epictechllc/just-scout-components";
-import { Menu as MenuIcon } from "@epictechllc/just-scout-components/icons";
+
+import { Menu as MenuIcon } from "@mui/icons-material";
+import { AppBar, Box, Button, CssBaseline, Divider, Drawer, IconButton, List, ListItem, ListItemButton, ListItemText, Toolbar, Typography } from "@mui/material";
 import { useState } from "react";
 
 const drawerWidth = 240;
