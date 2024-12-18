@@ -62,7 +62,7 @@ export default function Teams() {
       </Box>
       <Box display="flex" justifyContent="center" width="auto">
         {isPending ? (
-          <CircularProgress />
+          <CircularProgress size={80} />
         ) : (
           <DataGrid
             rows={teams}

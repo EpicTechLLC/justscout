@@ -1,14 +1,30 @@
-
 import { Menu as MenuIcon } from "@mui/icons-material";
-import { AppBar, Box, Button, CssBaseline, Divider, Drawer, IconButton, List, ListItem, ListItemButton, ListItemText, Toolbar, Typography } from "@mui/material";
+import {
+  AppBar,
+  Box,
+  Button,
+  Divider,
+  Drawer,
+  IconButton,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemText,
+  Toolbar,
+  Typography,
+} from "@mui/material";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 const drawerWidth = 240;
-const navItems = ["Home", "About", "Contact"];
+export const navItems = [
+  { name: "Home", rootLink: "/" },
+  { name: "Teams", rootLink: "/Teams/0" },
+];
 
 export default function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
-
+  const router = useRouter();
   const handleDrawerToggle = () => {
     setMobileOpen((prevState) => !prevState);
   };
@@ -21,9 +37,14 @@ export default function Header() {
       <Divider />
       <List>
         {navItems.map((item) => (
-          <ListItem key={item} disablePadding>
-            <ListItemButton sx={{ textAlign: "center" }}>
-              <ListItemText primary={item} />
+          <ListItem key={item.name} disablePadding>
+            <ListItemButton
+              sx={{ textAlign: "center" }}
+              onClick={() =>
+                router.push(`${item.rootLink.toLocaleLowerCase()}`)
+              }
+            >
+              <ListItemText primary={item.name} />
             </ListItemButton>
           </ListItem>
         ))}
@@ -44,8 +65,14 @@ export default function Header() {
           </Typography>
           <Box sx={{ display: { xs: "none", sm: "block" } }}>
             {navItems.map((item) => (
-              <Button key={item} sx={{ color: "#fff" }}>
-                {item}
+              <Button
+                key={item.name}
+                sx={{ color: "#fff" }}
+                onClick={() =>
+                  router.push(`${item.rootLink.toLocaleLowerCase()}`)
+                }
+              >
+                {item.name}
               </Button>
             ))}
           </Box>
