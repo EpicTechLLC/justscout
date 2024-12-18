@@ -1,7 +1,5 @@
 import type { Metadata } from "next";
-import { createAppContext } from "@epictechllc/just-scout-components";
 import LayoutWrapper from "./components/LayoutWrapper";
-import Header from "./components/Header";
 export const metadata: Metadata = {
   title: "Just Scout",
   description: "",
@@ -14,10 +12,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <meta name="viewport" content="initial-scale=1, width=device-width" />
+      </head>
       <body className={`antialiased`}>
-        <LayoutWrapper>
-          {children}
-        </LayoutWrapper>
+        <LayoutWrapper>{children}</LayoutWrapper>
       </body>
     </html>
   );

@@ -1,6 +1,22 @@
 import Image from "next/image";
 
-export default function Home() {
+export default async function Home() {
+  const authKey = process.env.NEXT_BLUE_ALLIANCE_API_KEY;
+  const headers: Record<string, string> = {
+    "Content-Type": "application/json",
+  };
+
+  if (authKey) {
+    headers["X-TBA-Auth-Key"] = authKey;
+  }
+  const res = await fetch(
+    "https://www.thebluealliance.com/api/v3/teams/0/simple",
+    {
+      headers,
+    }
+  );
+  const data = await res.json();
+
   return (
     <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
       <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">

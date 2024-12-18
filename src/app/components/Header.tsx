@@ -33,7 +33,6 @@ export default function Header() {
 
   return (
     <Box sx={{ display: "flex" }}>
-      <CssBaseline />
       <AppBar component="nav">
         <Toolbar>
           <Typography
@@ -81,7 +80,7 @@ export default function Header() {
           {drawer}
         </Drawer>
       </nav>
-      <Box component="main" sx={{ p: 3 }}>
+      <Box component="main" sx={{ p: 1 }}>
         <Toolbar />
       </Box>
     </Box>
