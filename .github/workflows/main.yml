@@ -34,7 +34,7 @@ jobs:
       - name: Run New Container with Health Check
         run: |
           docker run -d \
-            -p 5000:3000 \ # Map host's port 5000 to container's port 3000
+            -p 5000:3000 \
             --name justscout-container \
             --restart unless-stopped \
             --health-cmd="curl -f http://localhost:5000/ || exit 1" \
