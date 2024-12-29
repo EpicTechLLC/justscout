@@ -13,11 +13,16 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      # Step 2: Build the Docker Image
+      # Step 2: Write .env File from GitHub Secret
+      - name: Create .env File
+        run: |
+          echo "${{ secrets.ENV_VARS }}" > .env
+
+      # Step 3: Build the Docker Image
       - name: Build Docker Image
         run: docker build -t justscout .
 
-      # Step 3: Stop and Remove Existing Container (Robust Cleanup)
+      # Step 4: Stop and Remove Existing Container (Robust Cleanup)
       - name: Stop and Remove Existing Container
         run: |
           if [ "$(docker ps -aq -f name=justscout-container)" ]; then
@@ -25,7 +30,7 @@ jobs:
             docker rm justscout-container || true
           fi
 
-      # Step 4: Run New Container with Correct Port Mapping
+      # Step 5: Run New Container with Correct Port Mapping
       - name: Run New Container with Health Check
         run: |
           docker run -d \
@@ -38,6 +43,6 @@ jobs:
             --health-retries=3 \
             justscout
 
-      # Step 5: Clean Up Old Docker Images
+      # Step 6: Clean Up Old Docker Images
       - name: Remove Unused Docker Images
         run: docker image prune -f
