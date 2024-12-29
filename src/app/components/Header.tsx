@@ -1,4 +1,5 @@
 import { Menu as MenuIcon } from "@mui/icons-material";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import {
   AppBar,
   Box,
@@ -10,20 +11,70 @@ import {
   ListItem,
   ListItemButton,
   ListItemText,
+  Menu,
+  MenuItem,
   Toolbar,
   Typography,
 } from "@mui/material";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { onAuthStateChanged, signOut } from "firebase/auth";
 import { JustScoutRoutes } from "../types/Routes";
+import { auth } from "../firebaseConfig";
 
 const drawerWidth = 240;
 
 export default function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [accountMenuAnchor, setAccountMenuAnchor] =
+    useState<null | HTMLElement>(null);
+  const [user, setUser] = useState<null | {
+    displayName: string;
+    photoURL: string;
+  }>(null);
   const router = useRouter();
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
+      if (firebaseUser) {
+        setUser({
+          displayName: firebaseUser.displayName || "User",
+          photoURL: firebaseUser.photoURL || "",
+        });
+      } else {
+        setUser(null);
+      }
+    });
+
+    return () => unsubscribe();
+  }, []);
+
   const handleDrawerToggle = () => {
     setMobileOpen((prevState) => !prevState);
+  };
+
+  const handleAccountMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
+    setAccountMenuAnchor(event.currentTarget);
+  };
+
+  const handleAccountMenuClose = () => {
+    setAccountMenuAnchor(null);
+  };
+
+  const handleNavigateToAccount = () => {
+    router.push("/account");
+    handleAccountMenuClose();
+  };
+
+  const handleLogin = () => {
+    router.push("/login");
+    handleAccountMenuClose();
+  };
+
+  const handleLogout = async () => {
+    await signOut(auth);
+    router.push("/login");
+    handleAccountMenuClose();
   };
 
   const drawer = (
@@ -58,7 +109,9 @@ export default function Header() {
           >
             Just Scout
           </Typography>
-          <Box sx={{ display: { xs: "none", sm: "block" } }}>
+          <Box
+            sx={{ display: { xs: "none", sm: "flex" }, alignItems: "center" }}
+          >
             {Object.values(JustScoutRoutes).map((item) => (
               <Button
                 key={item.name}
@@ -68,6 +121,30 @@ export default function Header() {
                 {item.name}
               </Button>
             ))}
+            {/* Always Display Account Icon */}
+            <IconButton onClick={handleAccountMenuOpen} sx={{ ml: 2 }}>
+              <AccountCircleIcon sx={{ color: "#fff" }} />
+            </IconButton>
+            <Menu
+              anchorEl={accountMenuAnchor}
+              open={Boolean(accountMenuAnchor)}
+              onClose={handleAccountMenuClose}
+            >
+              {user ? (
+                [
+                  <MenuItem key="account" onClick={handleNavigateToAccount}>
+                    My Account
+                  </MenuItem>,
+                  <MenuItem key="logout" onClick={handleLogout}>
+                    Logout
+                  </MenuItem>,
+                ]
+              ) : (
+                <MenuItem key="login" onClick={handleLogin}>
+                  Login
+                </MenuItem>
+              )}
+            </Menu>
           </Box>
           <IconButton
             color="inherit"
@@ -87,7 +164,7 @@ export default function Header() {
           open={mobileOpen}
           onClose={handleDrawerToggle}
           ModalProps={{
-            keepMounted: true, // Better open performance on mobile.
+            keepMounted: true,
           }}
           sx={{
             display: { xs: "block", sm: "none" },
