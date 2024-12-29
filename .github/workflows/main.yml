@@ -34,10 +34,10 @@ jobs:
       - name: Run New Container with Health Check
         run: |
           docker run -d \
-            -p 5000:3000 \
+            -p 5001:3000 \
             --name justscout-container \
             --restart unless-stopped \
-            --health-cmd="curl -f http://localhost:5000/ || exit 1" \
+            --health-cmd="curl -f http://localhost:5001/ || exit 1" \
             --health-interval=30s \
             --health-timeout=10s \
             --health-retries=3 \
