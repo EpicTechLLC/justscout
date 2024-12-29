@@ -71,11 +71,6 @@ export default function Header() {
     handleAccountMenuClose();
   };
 
-  const handleSignUp = () => {
-    router.push("/signup");
-    handleAccountMenuClose();
-  };
-
   const handleLogout = async () => {
     await signOut(auth);
     router.push("/login");
@@ -135,23 +130,20 @@ export default function Header() {
               open={Boolean(accountMenuAnchor)}
               onClose={handleAccountMenuClose}
             >
-              {user
-                ? [
-                    <MenuItem key="account" onClick={handleNavigateToAccount}>
-                      My Account
-                    </MenuItem>,
-                    <MenuItem key="logout" onClick={handleLogout}>
-                      Logout
-                    </MenuItem>,
-                  ]
-                : [
-                    <MenuItem key="login" onClick={handleLogin}>
-                      Login
-                    </MenuItem>,
-                    <MenuItem key="signup" onClick={handleSignUp}>
-                      Sign Up
-                    </MenuItem>,
-                  ]}
+              {user ? (
+                [
+                  <MenuItem key="account" onClick={handleNavigateToAccount}>
+                    My Account
+                  </MenuItem>,
+                  <MenuItem key="logout" onClick={handleLogout}>
+                    Logout
+                  </MenuItem>,
+                ]
+              ) : (
+                <MenuItem key="login" onClick={handleLogin}>
+                  Login
+                </MenuItem>
+              )}
             </Menu>
           </Box>
           <IconButton
