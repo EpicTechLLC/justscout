@@ -15,12 +15,9 @@ import {
 } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { JustScoutRoutes } from "../types/Routes";
 
 const drawerWidth = 240;
-export const navItems = [
-  { name: "Home", rootLink: "/" },
-  { name: "Teams", rootLink: "/Teams/0" },
-];
 
 export default function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -36,13 +33,11 @@ export default function Header() {
       </Typography>
       <Divider />
       <List>
-        {navItems.map((item) => (
+        {Object.values(JustScoutRoutes).map((item) => (
           <ListItem key={item.name} disablePadding>
             <ListItemButton
               sx={{ textAlign: "center" }}
-              onClick={() =>
-                router.push(`${item.rootLink.toLocaleLowerCase()}`)
-              }
+              onClick={() => router.push(`${item.path}`)}
             >
               <ListItemText primary={item.name} />
             </ListItemButton>
@@ -64,13 +59,11 @@ export default function Header() {
             Just Scout
           </Typography>
           <Box sx={{ display: { xs: "none", sm: "block" } }}>
-            {navItems.map((item) => (
+            {Object.values(JustScoutRoutes).map((item) => (
               <Button
                 key={item.name}
                 sx={{ color: "#fff" }}
-                onClick={() =>
-                  router.push(`${item.rootLink.toLocaleLowerCase()}`)
-                }
+                onClick={() => router.push(`${item.path}`)}
               >
                 {item.name}
               </Button>

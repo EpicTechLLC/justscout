@@ -1,0 +1,20 @@
+type TeamInfoType = {
+  address: string | null;
+  city: string;
+  country: string;
+  gmaps_place_id: string | null;
+  gmaps_url: string | null;
+  key: string;
+  lat: number | null;
+  lng: number | null;
+  location_name: string | null;
+  motto: string | null;
+  name: string;
+  nickname: string;
+  postal_code: string;
+  rookie_year: number;
+  school_name: string;
+  state_prov: string;
+  team_number: number;
+  website: string;
+};
