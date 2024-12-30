@@ -15,12 +15,15 @@ import {
   MenuItem,
   Toolbar,
   Typography,
+  Autocomplete,
+  TextField,
 } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import { JustScoutRoutes } from "../types/Routes";
 import { auth } from "../firebaseConfig";
+import { TeamInfoSimpleType } from "../types/TeamInfoSimpleType ";
 
 const drawerWidth = 240;
 
@@ -32,6 +35,7 @@ export default function Header() {
     displayName: string;
     photoURL: string;
   }>(null);
+  const [searchResults, setSearchResults] = useState<TeamInfoSimpleType[]>([]);
   const router = useRouter();
 
   useEffect(() => {
@@ -77,6 +81,32 @@ export default function Header() {
     handleAccountMenuClose();
   };
 
+  const handleSearch = async (query: string) => {
+    if (query.trim().length > 0) {
+      try {
+        const response = await fetch(`/api/search-team?query=${query}`);
+        if (response.ok) {
+          const result = await response.json();
+
+          // If result is a single object, wrap it in an array for Autocomplete
+          if (result && typeof result === "object" && !Array.isArray(result)) {
+            setSearchResults([result]);
+          } else {
+            console.error("Unexpected API result format:", result);
+            setSearchResults([]);
+          }
+        } else {
+          setSearchResults([]);
+        }
+      } catch (error) {
+        console.error("Error searching teams:", error);
+        setSearchResults([]);
+      }
+    } else {
+      setSearchResults([]);
+    }
+  };
+
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: "center" }}>
       <Typography variant="h6" sx={{ my: 2 }}>
@@ -109,6 +139,34 @@ export default function Header() {
           >
             Just Scout
           </Typography>
+          <Box sx={{ flexGrow: 1, maxWidth: "300px", mx: 2 }}>
+            <Autocomplete
+              size="small"
+              options={searchResults}
+              getOptionLabel={(option: TeamInfoSimpleType) =>
+                `${option.team_number} - ${option.nickname}`
+              }
+              onInputChange={(_, value) => handleSearch(value)}
+              onChange={(_, value) => {
+                if (value) {
+                  router.push(
+                    `${JustScoutRoutes.profiles.subpaths.team.path}/${value.team_number}`
+                  );
+                }
+              }}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="Search Teams..."
+                  variant="filled"
+                  sx={{
+                    backgroundColor: "white",
+                  }}
+                />
+              )}
+              noOptionsText="No teams found"
+            />
+          </Box>
           <Box
             sx={{ display: { xs: "none", sm: "flex" }, alignItems: "center" }}
           >
