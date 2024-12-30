@@ -1,11 +1,8 @@
 // Import Firebase functions
-import { initializeApp } from "firebase/app";
-import {
-  initializeFirestore,
-  memoryLocalCache,
-} from "firebase/firestore";
+import { getApps, initializeApp } from "firebase/app";
+import { initializeFirestore, memoryLocalCache } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
-import { getAnalytics } from "firebase/analytics";
+import { getAnalytics, isSupported } from "firebase/analytics";
 
 // Firebase configuration
 const firebaseConfig = {
@@ -18,14 +15,20 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
+const app =
+  getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
 
 // Initialize Firestore with offline persistence
-const db = initializeFirestore(app, {localCache: memoryLocalCache()});
+const db = initializeFirestore(app, { localCache: memoryLocalCache() });
 
 // Initialize Auth
 const auth = getAuth(app);
 
-const analytics = getAnalytics(app);
+// Initialize Analytics (conditionally)
+const analyticsPromise =
+  typeof window !== "undefined"
+    ? isSupported().then((supported) => (supported ? getAnalytics(app) : null))
+    : Promise.resolve(null);
 
-export { app, db, auth, analytics };
+export const analytics = analyticsPromise;
+export { app, db, auth };

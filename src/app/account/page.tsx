@@ -7,6 +7,8 @@ import { doc, getDoc, setDoc } from "firebase/firestore";
 import { auth, db } from "../firebaseConfig";
 import Loader from "../components/Loader";
 
+export const dynamic = "force-dynamic";
+
 export default function Account() {
   const [user, setUser] = useState<null | {
     displayName: string;
