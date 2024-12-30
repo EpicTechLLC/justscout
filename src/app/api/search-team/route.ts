@@ -1,7 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { TeamInfoSimpleType } from "../../types/TeamInfoSimpleType ";
 
-export async function GET(request: NextRequest, res: NextResponse) {
+export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
   const query = searchParams.get("query");
 
