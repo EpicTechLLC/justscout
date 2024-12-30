@@ -1,101 +1,129 @@
-import Image from "next/image";
+"use client";
+import { useEffect, useState } from "react";
+import { Box, Button, Container, Typography } from "@mui/material";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "./firebaseConfig";
+import { JustScoutRoutes } from "./types/Routes";
+import { useRouter } from "next/navigation";
 
-export default async function Home() {
+export default function LandingPage() {
+  const [user, setUser] = useState<null | {
+    displayName: string;
+    email: string;
+  }>(null);
+  const router = useRouter();
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
+      if (firebaseUser) {
+        setUser({
+          displayName: firebaseUser.displayName || "User",
+          email: firebaseUser.email || "Unknown Email",
+        });
+      } else {
+        setUser(null);
+      }
+    });
+
+    return () => unsubscribe();
+  }, []);
+
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+    <Box>
+      <Box
+        sx={{
+          backgroundColor: "#f5f5f5",
+          padding: "4rem 0",
+          textAlign: "center",
+        }}
+      >
+        <Container maxWidth="md">
+          <Typography variant="h2" sx={{ fontWeight: "bold", mb: "1rem" }}>
+            The Ultimate FRC Scouting Platform
+          </Typography>
+          <Typography variant="h6" sx={{ mb: "2rem", color: "#555" }}>
+            Streamline your team’s scouting process and make data-driven
+            decisions with Just Scout.
+          </Typography>
+          {user ? (
+            <Typography
+              variant="h6"
+              sx={{ fontWeight: "bold", color: "#1976d2" }}
+            >
+              Welcome back, {user.displayName}!
+            </Typography>
+          ) : (
+            <Button
+              variant="contained"
+              size="large"
+              sx={{ backgroundColor: "#1976d2", fontWeight: "bold" }}
+              onClick={() => {
+                window.location.href = "/login"; // Navigate to login page
+              }}
+            >
+              Login to Get Started
+            </Button>
+          )}
+        </Container>
+      </Box>
+      <Box
+        sx={{
+          padding: "4rem 0",
+          backgroundColor: "#fff",
+        }}
+      >
+        <Container maxWidth="lg">
+          <Typography variant="h4" sx={{ fontWeight: "bold", mb: "2rem" }}>
+            Features
+          </Typography>
+          <Box
+            sx={{
+              display: "grid",
+              gridTemplateColumns: { xs: "1fr", sm: "1fr 1fr" },
+              gap: "2rem",
+            }}
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+            {[
+              {
+                title: "Robot Profiles",
+                description:
+                  "Explore detailed robot profiles with stats and information from Statbotics and the Blue Alliance.",
+                link: JustScoutRoutes.profiles.subpaths.teams.path,
+              },
+              {
+                title: "Custom Profiles (Coming Soon)",
+                description:
+                  "Share personalized profiles of your robot with other teams effortlessly.",
+                link: null,
+              },
+              {
+                title: "Scouting (Coming Soon)",
+                description:
+                  "Leverage profiles to enhance your scouting experience and strategy.",
+                link: null,
+              },
+            ].map((feature, index) => (
+              <Box key={index} sx={{ textAlign: "center" }}>
+                <Typography variant="h6" sx={{ fontWeight: "bold" }}>
+                  {feature.title}
+                </Typography>
+                <Typography sx={{ color: "#555", mt: "0.5rem" }}>
+                  {feature.description}
+                </Typography>
+                {feature.link && (
+                  <Button
+                    variant="text"
+                    sx={{ color: "#1976d2", fontWeight: "bold", mt: "1rem" }}
+                    onClick={() => router.push(feature.link)}
+                  >
+                    Learn More
+                  </Button>
+                )}
+              </Box>
+            ))}
+          </Box>
+        </Container>
+      </Box>
+    </Box>
   );
 }
