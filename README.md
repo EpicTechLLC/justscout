@@ -1,30 +1,36 @@
-# Just Scout
-
-## Stack:
-
-- NextJS
-- Material UI
-- FireBase
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
 
-- Install the following:
+First, run the development server:
 
-  - [Node JS](https://nodejs.org/en/download/current) Current or 18+
-  - [PNPM](https://pnpm.io/installation#using-npm)
+```bash
+npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+# or
+bun dev
+```
 
-- Create .env.local and ask for variables.
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-- Install packages
-  `pnpm i`
+You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-- Run Dev Server
-  `pnpm run dev`
+This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-- Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Learn More
 
-## Things to keep in mind
+To learn more about Next.js, take a look at the following resources:
 
-<strong>main</strong> branch is what is at [justscout.vercel.app](https://justscout.vercel.app/) so if you're making changes branch out of <strong>dev</strong> to start your changes.
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-Before merging to the <strong>dev</strong> branch update the package.json version to the appropriate [semantic versioning](https://docs.npmjs.com/about-semantic-versioning)
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+
+## Deploy on Vercel
+
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.

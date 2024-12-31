@@ -1,14 +1,8 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import Providers from "./components/Providers";
-import Header from "./components/Header";
-import { Card, Container } from "@mui/material";
-
-const inter = Inter({ subsets: ["latin"] });
-
+import LayoutWrapper from "./components/LayoutWrapper";
 export const metadata: Metadata = {
   title: "Just Scout",
-  description: "A simple way to share scouting information for FRC Teams",
+  description: "",
 };
 
 export default function RootLayout({
@@ -18,13 +12,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>
-        <Providers>
-          <Header />
-          <Container sx={{ mt: 4, display: "flex", justifyContent: "center" }}>
-            {children}
-          </Container>
-        </Providers>
+      <head>
+        <meta name="viewport" content="initial-scale=1, width=device-width" />
+      </head>
+      <body className={`antialiased`}>
+        <LayoutWrapper>{children}</LayoutWrapper>
       </body>
     </html>
   );
