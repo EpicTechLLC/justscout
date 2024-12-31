@@ -1,24 +1,48 @@
-name: Vercel Production Deployment
-env:
-  VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-  VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+name: Build and Deploy JustScout
+
 on:
   push:
-    branches:
-      - main
+    branches: [main]
+
 jobs:
-  Deploy-Production:
-    runs-on: ubuntu-latest
+  build-and-deploy:
+    runs-on: self-hosted
+
     steps:
-      - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v3
-        with:
-          version: 8
-      - name: Install Vercel CLI
-        run: pnpm install --global vercel@latest
-      - name: Pull Vercel Environment Information
-        run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
-      - name: Build Project Artifacts
-        run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
-      - name: Deploy Project Artifacts to Vercel
-        run: vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}
+      # Step 1: Checkout the Repository
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      # Step 2: Write .env File from GitHub Secret
+      - name: Create .env File
+        run: |
+          echo "${{ secrets.ENV_VARS }}" > .env
+
+      # Step 3: Build the Docker Image
+      - name: Build Docker Image
+        run: docker build -t justscout .
+
+      # Step 4: Stop and Remove Existing Container (Robust Cleanup)
+      - name: Stop and Remove Existing Container
+        run: |
+          if [ "$(docker ps -aq -f name=justscout-container)" ]; then
+            docker stop justscout-container || true
+            docker rm justscout-container || true
+          fi
+
+      # Step 5: Run New Container with Correct Port Mapping
+      - name: Run New Container with Health Check
+        run: |
+          docker run -d \
+            -p 5001:3000 \
+            --name justscout-container \
+            --restart unless-stopped \
+            --health-cmd="curl -f http://localhost:5001/ || exit 1" \
+            --health-interval=30s \
+            --health-timeout=10s \
+            --health-retries=3 \
+            justscout
+
+      # Step 6: Clean Up Old Docker Images
+      - name: Remove Unused Docker Images
+        run: docker image prune -f
