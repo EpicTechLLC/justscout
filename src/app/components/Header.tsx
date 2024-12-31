@@ -87,8 +87,6 @@ export default function Header() {
         const response = await fetch(`/api/search-team?query=${query}`);
         if (response.ok) {
           const result = await response.json();
-
-          // If result is a single object, wrap it in an array for Autocomplete
           if (result && typeof result === "object" && !Array.isArray(result)) {
             setSearchResults([result]);
           } else {
@@ -109,7 +107,11 @@ export default function Header() {
 
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: "center" }}>
-      <Typography variant="h6" sx={{ my: 2 }}>
+      <Typography
+        variant="h6"
+        sx={{ my: 2, cursor: "pointer" }}
+        onClick={() => router.push("/")}
+      >
         Just Scout
       </Typography>
       <Divider />
@@ -124,6 +126,29 @@ export default function Header() {
             </ListItemButton>
           </ListItem>
         ))}
+      </List>
+      <Divider />
+      <List>
+        {user ? (
+          [
+            <ListItem disablePadding key="account">
+              <ListItemButton onClick={handleNavigateToAccount}>
+                <ListItemText primary="My Account" />
+              </ListItemButton>
+            </ListItem>,
+            <ListItem disablePadding key="logout">
+              <ListItemButton onClick={handleLogout}>
+                <ListItemText primary="Logout" />
+              </ListItemButton>
+            </ListItem>,
+          ]
+        ) : (
+          <ListItem disablePadding>
+            <ListItemButton onClick={handleLogin}>
+              <ListItemText primary="Login" />
+            </ListItemButton>
+          </ListItem>
+        )}
       </List>
     </Box>
   );
@@ -179,7 +204,6 @@ export default function Header() {
                 {item.name}
               </Button>
             ))}
-            {/* Always Display Account Icon */}
             <IconButton onClick={handleAccountMenuOpen} sx={{ ml: 2 }}>
               <AccountCircleIcon sx={{ color: "#fff" }} />
             </IconButton>
