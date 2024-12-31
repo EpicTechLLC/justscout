@@ -2,7 +2,7 @@ name: Build and Deploy JustScout
 
 on:
   push:
-    branches: [main, restart]
+    branches: [main]
 
 jobs:
   build-and-deploy:
