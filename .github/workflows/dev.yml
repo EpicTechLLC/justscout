@@ -1,8 +1,8 @@
-name: Build and Deploy JustScout
+name: Build and Deploy Dev JustScout
 
 on:
   push:
-    branches: [main]
+    branches: [dev]
 
 jobs:
   build-and-deploy:
@@ -16,32 +16,32 @@ jobs:
       # Step 2: Write .env File from GitHub Secret
       - name: Create .env File
         run: |
-          echo "${{ secrets.ENV_VARS }}" > .env
+          echo "${{ secrets.ENV_VARS_DEV }}" > .env
 
       # Step 3: Build the Docker Image
       - name: Build Docker Image
-        run: docker build -t justscout .
+        run: docker build -t dev-justscout .
 
       # Step 4: Stop and Remove Existing Container (Robust Cleanup)
       - name: Stop and Remove Existing Container
         run: |
           if [ "$(docker ps -aq -f name=justscout-container)" ]; then
-            docker stop justscout-container || true
-            docker rm justscout-container || true
+            docker stop dev-justscout-container || true
+            docker rm dev-justscout-container || true
           fi
 
       # Step 5: Run New Container with Correct Port Mapping
       - name: Run New Container with Health Check
         run: |
           docker run -d \
-            -p 5001:3000 \
-            --name justscout-container \
+            -p 5002:3000 \
+            --name dev-justscout-container \
             --restart unless-stopped \
-            --health-cmd="curl -f http://localhost:5001/ || exit 1" \
+            --health-cmd="curl -f http://localhost:5002/ || exit 1" \
             --health-interval=30s \
             --health-timeout=10s \
             --health-retries=3 \
-            justscout
+            dev-justscout
 
       # Step 6: Clean Up Old Docker Images
       - name: Remove Unused Docker Images

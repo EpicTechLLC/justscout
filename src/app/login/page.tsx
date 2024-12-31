@@ -12,7 +12,7 @@ export default function Login() {
     const provider = new GoogleAuthProvider();
     try {
       await signInWithPopup(auth, provider);
-      router.push("/");
+      router.push("/account");
     } catch (error) {
       console.error("Google login failed:", error);
     }
