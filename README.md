@@ -1,36 +1,111 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Just Scout
 
-## Getting Started
+Just Scout is an FRC (FIRST Robotics Competition) scouting platform designed to streamline team collaboration, strategy development, and data-driven decision-making. The platform provides detailed robot profiles, statistics integration, and future-ready features like custom profiles and scouting tools.
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Features
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- **Robot Profiles**: View detailed information about teams and their robots, including statistics from Statbotics.
+- **Team Search**: Easily search for teams by number or name.
+- **Custom Profiles** _(Coming Soon)_: Create and share personalized robot profiles with other teams.
+- **Scouting Tools** _(Coming Soon)_: Enhance your scouting experience with robust and integrated tools.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Installation
 
-## Learn More
+### Prerequisites
 
-To learn more about Next.js, take a look at the following resources:
+- **Node.js** (version 18.x or later)
+- **npm** or **pnpm** (preferred)
+- Firebase account and configuration file (for authentication and Firestore contact us for dev access)
+- **Blue Alliance API Key**: Register for an API key at [The Blue Alliance API Key Registration](https://www.thebluealliance.com/apidocs).
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Steps
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+1. Clone the repository:
 
-## Deploy on Vercel
+   ```bash
+   git clone https://github.com/yourusername/just-scout.git
+   cd just-scout
+   ```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+2. Install dependencies:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+   ```bash
+   pnpm install
+   ```
+
+3. Set up your Firebase configuration:
+
+   - Create a `.env.local` file in the root of your project and add the following:
+
+   ```bash
+   NEXT_PUBLIC_FIREBASE_API_KEY=your-api-key
+   NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=your-auth-domain
+   NEXT_PUBLIC_FIREBASE_PROJECT_ID=your-project-id
+   NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=your-storage-bucket
+   NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=your-messaging-sender-id
+   NEXT_PUBLIC_FIREBASE_APP_ID=your-app-id
+   NEXT_BLUE_ALLIANCE_API_KEY=your-blue-alliance-api-key
+   ```
+
+4. Run the development server:
+
+   ```bash
+   pnpm dev
+   ```
+
+5. Open your browser and navigate to:
+   ```
+   http://localhost:3000
+   ```
+
+---
+
+## Technology Stack
+
+- **Frontend**: [Next.js](https://nextjs.org/) (React Framework)
+- **UI Components**: [Material-UI](https://mui.com/)
+- **Database**: Firebase Firestore
+- **Styling**: Material-UI Theming
+- **Third-Party Integration**: [Statbotics](https://www.statbotics.io/) for robot statistics, [The Blue Alliance API](https://www.thebluealliance.com/) for team data.
+
+---
+
+## Roadmap
+
+- [x] Basic robot profiles with search functionality.
+- [x] Google-based authentication.
+- [ ] Custom profile creation and sharing.
+- [ ] Scouting tools for match tracking and strategy.
+
+---
+
+## Contributing
+
+We welcome contributions! To get started:
+
+1. Fork the repository.
+2. Create a new branch for your feature:
+   ```bash
+   git checkout -b feature/your-feature-name
+   ```
+3. Commit your changes:
+   ```bash
+   git commit -m "Add your feature"
+   ```
+4. Push to your branch:
+   ```bash
+   git push origin feature/your-feature-name
+   ```
+5. Open a pull request on the main repository.
+
+---
+
+## Issues
+
+If you encounter any issues or have feature requests, please open an issue on our GitHub repository:
+
+- [Open an Issue](https://github.com/EpicTechLLC/justscout/issues)
