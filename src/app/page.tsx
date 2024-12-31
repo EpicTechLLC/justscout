@@ -38,7 +38,7 @@ export default function LandingPage() {
         }}
       >
         <Container maxWidth="md">
-          <Typography variant="h2" sx={{ fontWeight: "bold", mb: "1rem" }}>
+          <Typography variant="h3" sx={{ fontWeight: "bold", mb: "1rem" }}>
             The Ultimate FRC Scouting Platform
           </Typography>
           <Typography variant="h6" sx={{ mb: "2rem", color: "#555" }}>
