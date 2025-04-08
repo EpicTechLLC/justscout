@@ -48,7 +48,7 @@ export default function Header() {
             }}
             m={0.5}
           >
-            Scouting (beta)
+            Scouting*
           </MUILink>
           <AccountMenu
             user={user as User}
