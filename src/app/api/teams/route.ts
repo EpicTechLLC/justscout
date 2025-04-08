@@ -7,8 +7,7 @@ import { NextRequest, NextResponse } from "next/server";
 export const dynamic = "force-dynamic";
 export async function GET(req: NextRequest, res: NextResponse<ITeamList>) {
   const api = firstAPI();
-  const ancillary = (await api.get("").json()) as IFirstAncillary;
-  let currentSeason = ancillary.currentSeason;
+  let currentSeason = new Date().getFullYear().toString();
   const result = (await api
     .get(`${currentSeason}/teams`, { cache: "force-cache" })
     .json()) as ITeamList;
