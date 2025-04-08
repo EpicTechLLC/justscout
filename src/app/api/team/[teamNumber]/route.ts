@@ -9,8 +9,7 @@ export async function GET(
 ) {
   const teamNumber = params.teamNumber;
   const api = firstAPI();
-  const ancillary = (await api.get("").json()) as IFirstAncillary;
-  let currentSeason = ancillary.currentSeason;
+  let currentSeason = new Date().getFullYear().toString();
   const teamInfo = (await api
     .get(`${currentSeason}/teams?teamNumber=${teamNumber}`)
     .json()
