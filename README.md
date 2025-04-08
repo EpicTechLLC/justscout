@@ -28,3 +28,8 @@
 <strong>main</strong> branch is what is at [justscout.vercel.app](https://justscout.vercel.app/) so if you're making changes branch out of <strong>dev</strong> to start your changes.
 
 Before merging to the <strong>dev</strong> branch update the package.json version to the appropriate [semantic versioning](https://docs.npmjs.com/about-semantic-versioning)
+
+
+Deployment
+`vercel login`
+`vercel --env`
